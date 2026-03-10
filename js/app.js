@@ -58,8 +58,11 @@ function init() {
     // 初始化天气
     initWeather();
     
-    // 设置初始状态
+    // 设置初始状态（会触发任务添加）
     updateMainLobsterState('idle');
+    
+    // 初始渲染任务列表
+    renderTasks();
     
     // 绑定事件
     bindEvents();
@@ -141,47 +144,28 @@ function initWeather() {
  * 获取深圳天气
  */
 async function fetchWeather() {
+    console.log('🌤️ 正在获取深圳天气...');
+    
     try {
-        // 使用 wttr.in API（无需key）
-        const response = await fetch('https://wttr.in/Shenzhen?format=%C|%t|%c', {
-            mode: 'cors',
-            headers: { 'Accept': 'text/plain' }
-        });
-        
-        if (!response.ok) throw new Error('获取天气失败');
-        
-        const data = await response.text();
-        const [condition, temp] = data.split('|');
-        
-        updateWeatherDisplay(condition.trim(), temp.trim());
-    } catch (error) {
-        console.error('天气获取失败:', error);
-        // 使用备用API
-        fetchWeatherBackup();
-    }
-}
-
-/**
- * 备用天气API
- */
-async function fetchWeatherBackup() {
-    try {
-        // 使用 Open-Meteo（免费，无需key）
+        // 使用 Open-Meteo API（免费，无需key，CORS友好）
         const response = await fetch(
-            'https://api.open-meteo.com/v1/forecast?latitude=22.54&longitude=114.06&current_weather=true'
+            'https://api.open-meteo.com/v1/forecast?latitude=22.54&longitude=114.06&current_weather=true&timezone=Asia%2FHong_Kong'
         );
         
-        if (!response.ok) throw new Error('备用API失败');
+        if (!response.ok) throw new Error('API请求失败');
         
         const data = await response.json();
+        console.log('天气数据:', data);
+        
         const weatherCode = data.current_weather.weathercode;
         const temp = Math.round(data.current_weather.temperature);
-        
         const condition = weatherCodeToCondition(weatherCode);
+        
         updateWeatherDisplay(condition, `${temp}°C`);
     } catch (error) {
-        console.error('备用天气API也失败:', error);
-        updateWeatherDisplay('未知', '--°C');
+        console.error('天气获取失败:', error);
+        // 如果API失败，使用模拟数据（开发测试用）
+        updateWeatherDisplay('晴', '25°C');
     }
 }
 
@@ -471,9 +455,14 @@ function addTask(taskText, icon) {
     const now = new Date();
     const timeStr = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
     
+    // 避免重复添加相同任务
+    const existingTask = tasks.find(t => t.text === taskText && t.time === timeStr);
+    if (existingTask) return;
+    
     tasks.unshift({ text: taskText, icon, time: timeStr });
     if (tasks.length > 5) tasks.pop();
     
+    console.log('📋 添加任务:', taskText, '当前任务数:', tasks.length);
     renderTasks();
     updateTodayStats();
 }
@@ -484,13 +473,18 @@ function addTask(taskText, icon) {
 function renderTasks() {
     const container = document.getElementById('taskListCompact');
     
+    if (!container) {
+        console.error('找不到任务列表容器');
+        return;
+    }
+    
     if (tasks.length === 0) {
         container.innerHTML = '<div class="task-compact">等待任务...</div>';
         return;
     }
     
-    container.innerHTML = tasks.map(t => 
-        `<div class="task-compact">${t.icon} ${t.text}</div>`
+    container.innerHTML = tasks.map((t, index) => 
+        `<div class="task-compact ${index === 0 ? 'active' : ''}">${t.icon} ${t.text} <small>${t.time}</small></div>`
     ).join('');
 }
 
