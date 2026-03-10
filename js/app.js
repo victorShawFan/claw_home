@@ -83,6 +83,67 @@ function init() {
     // 更新运行时间
     updateUptime();
     setInterval(updateUptime, 60000);
+    
+    // 初始化昼夜模式
+    initDayNightMode();
+}
+
+/**
+ * 初始化昼夜模式
+ */
+function initDayNightMode() {
+    // 根据当前时间自动设置
+    const hour = new Date().getHours();
+    const isNight = hour < 6 || hour >= 18;
+    
+    if (isNight) {
+        document.body.classList.add('night-mode');
+        updateDayNightButton(true);
+    }
+}
+
+/**
+ * 切换昼夜模式
+ */
+function toggleDayNight() {
+    const isNight = document.body.classList.toggle('night-mode');
+    updateDayNightButton(isNight);
+    
+    // 显示切换提示
+    const message = isNight ? '🌙 切换到夜间模式~ 晚安！' : '☀️ 切换到日间模式~ 早安！';
+    showCustomBubble(message);
+}
+
+/**
+ * 更新昼夜切换按钮状态
+ * @param {boolean} isNight - 是否为夜间
+ */
+function updateDayNightButton(isNight) {
+    const button = document.getElementById('dayNightToggle');
+    const icon = document.getElementById('toggleIcon');
+    const text = document.getElementById('toggleText');
+    
+    if (isNight) {
+        button.classList.add('night');
+        icon.textContent = '🌙';
+        text.textContent = '夜间';
+    } else {
+        button.classList.remove('night');
+        icon.textContent = '☀️';
+        text.textContent = '日间';
+    }
+}
+
+/**
+ * 显示自定义气泡
+ * @param {string} message - 消息内容
+ */
+function showCustomBubble(message) {
+    const bubble = document.getElementById('speechBubble');
+    bubble.innerHTML = `<p>${message}</p>`;
+    bubble.style.animation = 'none';
+    bubble.offsetHeight;
+    bubble.style.animation = 'fade-in-out 3s ease-in-out';
 }
 
 /**

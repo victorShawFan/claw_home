@@ -14,9 +14,16 @@
                 <span class="lobster-icon">🦞</span>
                 <span class="title">Claw Home</span>
             </div>
-            <div class="system-status">
-                <span class="status-indicator online"></span>
-                <span class="status-text">在线</span>
+            <div class="top-controls">
+                <!-- 🌙 昼夜切换按钮 -->
+                <button class="day-night-toggle" id="dayNightToggle" onclick="toggleDayNight()" title="切换昼夜模式">
+                    <span class="toggle-icon" id="toggleIcon">☀️</span>
+                    <span class="toggle-text" id="toggleText">日间</span>
+                </button>
+                <div class="system-status">
+                    <span class="status-indicator online"></span>
+                    <span class="status-text">在线</span>
+                </div>
             </div>
         </header>
 
@@ -25,6 +32,23 @@
             <!-- 背景场景 -->
             <div class="scene">
                 <div class="water-bg"></div>
+                
+                <!-- ☀️ 太阳 / 🌙 月亮 -->
+                <div class="sun"></div>
+                <div class="moon"></div>
+                
+                <!-- ⭐ 星星（夜间显示） -->
+                <div class="stars">
+                    <div class="star"></div>
+                    <div class="star"></div>
+                    <div class="star"></div>
+                    <div class="star"></div>
+                    <div class="star"></div>
+                    <div class="star"></div>
+                    <div class="star"></div>
+                    <div class="star"></div>
+                </div>
+                
                 <div class="bubbles">
                     <div class="bubble"></div>
                     <div class="bubble"></div>

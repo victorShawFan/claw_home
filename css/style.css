@@ -19,6 +19,143 @@
     --shadow-hover: 0 8px 25px rgba(0, 0, 0, 0.15);
     --border-radius: 20px;
     --transition: all 0.3s ease;
+    
+    /* 场景颜色变量 */
+    --sky-top: #87CEEB;
+    --sky-bottom: #4682B4;
+    --ocean-deep: #191970;
+    --scene-overlay: rgba(255, 255, 255, 0);
+}
+
+/* 🌙 夜间模式变量 */
+body.night-mode {
+    --sky-top: #0a0a2e;
+    --sky-bottom: #1a1a4e;
+    --ocean-deep: #050520;
+    --scene-overlay: rgba(0, 0, 40, 0.4);
+    --card-bg: rgba(30, 30, 60, 0.9);
+    --text-dark: #E0E0E0;
+    --text-light: #A0A0A0;
+}
+
+body.night-mode .scene {
+    background: linear-gradient(180deg, var(--sky-top) 0%, var(--sky-bottom) 50%, var(--ocean-deep) 100%);
+}
+
+body.night-mode .scene::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--scene-overlay);
+    pointer-events: none;
+}
+
+/* ⭐ 星星动画 */
+body.night-mode .stars {
+    display: block;
+}
+
+.stars {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+}
+
+.star {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    background: white;
+    border-radius: 50%;
+    animation: twinkle 2s ease-in-out infinite;
+}
+
+.star:nth-child(1) { top: 10%; left: 10%; animation-delay: 0s; }
+.star:nth-child(2) { top: 20%; left: 80%; animation-delay: 0.3s; }
+.star:nth-child(3) { top: 15%; left: 50%; animation-delay: 0.6s; }
+.star:nth-child(4) { top: 30%; left: 20%; animation-delay: 0.9s; }
+.star:nth-child(5) { top: 25%; left: 70%; animation-delay: 1.2s; }
+.star:nth-child(6) { top: 40%; left: 40%; animation-delay: 1.5s; }
+.star:nth-child(7) { top: 35%; left: 90%; animation-delay: 1.8s; }
+.star:nth-child(8) { top: 50%; left: 15%; animation-delay: 0.4s; }
+
+@keyframes twinkle {
+    0%, 100% { opacity: 0.3; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.2); }
+}
+
+/* 🌙 月亮 */
+.moon {
+    display: none;
+    position: absolute;
+    top: 30px;
+    right: 50px;
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #FFF8DC, #F0E68C);
+    border-radius: 50%;
+    box-shadow: 0 0 30px rgba(255, 248, 220, 0.5);
+    animation: moon-glow 3s ease-in-out infinite;
+}
+
+.moon::before {
+    content: '';
+    position: absolute;
+    top: 15px;
+    left: 20px;
+    width: 12px;
+    height: 12px;
+    background: rgba(200, 200, 180, 0.3);
+    border-radius: 50%;
+}
+
+.moon::after {
+    content: '';
+    position: absolute;
+    top: 30px;
+    left: 35px;
+    width: 8px;
+    height: 8px;
+    background: rgba(200, 200, 180, 0.3);
+    border-radius: 50%;
+}
+
+body.night-mode .moon {
+    display: block;
+}
+
+body.night-mode .sun {
+    display: none;
+}
+
+@keyframes moon-glow {
+    0%, 100% { box-shadow: 0 0 30px rgba(255, 248, 220, 0.5); }
+    50% { box-shadow: 0 0 50px rgba(255, 248, 220, 0.8); }
+}
+
+/* ☀️ 太阳 */
+.sun {
+    position: absolute;
+    top: 30px;
+    right: 50px;
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #FFD700, #FFA500);
+    border-radius: 50%;
+    box-shadow: 0 0 40px rgba(255, 215, 0, 0.6);
+    animation: sun-pulse 4s ease-in-out infinite;
+}
+
+@keyframes sun-pulse {
+    0%, 100% { transform: scale(1); box-shadow: 0 0 40px rgba(255, 215, 0, 0.6); }
+    50% { transform: scale(1.05); box-shadow: 0 0 60px rgba(255, 215, 0, 0.8); }
 }
 
 body {
@@ -74,6 +211,52 @@ body {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+}
+
+.top-controls {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+/* 🌙 昼夜切换按钮 */
+.day-night-toggle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    border: none;
+    border-radius: 25px;
+    background: linear-gradient(135deg, #FFD700, #FFA500);
+    color: #333;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.95em;
+    font-weight: 500;
+    box-shadow: 0 3px 10px rgba(255, 215, 0, 0.3);
+}
+
+.day-night-toggle:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255, 215, 0, 0.5);
+}
+
+.day-night-toggle:active {
+    transform: translateY(0);
+}
+
+.day-night-toggle.night {
+    background: linear-gradient(135deg, #4a4a8a, #2a2a5a);
+    color: #E0E0E0;
+    box-shadow: 0 3px 10px rgba(100, 100, 200, 0.3);
+}
+
+.day-night-toggle.night:hover {
+    box-shadow: 0 5px 15px rgba(100, 100, 200, 0.5);
+}
+
+.toggle-icon {
+    font-size: 1.3em;
 }
 
 .system-status {
