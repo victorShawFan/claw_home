@@ -371,19 +371,76 @@ body {
     display: flex;
     gap: 100px;
     align-items: flex-end;
+    width: 80%;
+    height: 60%;
 }
 
 /* 🦞 小龙虾主体 */
 .lobster {
-    position: relative;
+    position: absolute;
     width: 180px;
     height: 200px;
     cursor: pointer;
     transition: var(--transition);
+    animation: lobster-walk 8s ease-in-out infinite;
+}
+
+/* 小龙虾走动动画 */
+@keyframes lobster-walk {
+    0% {
+        left: 10%;
+        transform: translateY(0) rotate(-2deg);
+    }
+    25% {
+        left: 30%;
+        transform: translateY(-5px) rotate(2deg);
+    }
+    50% {
+        left: 50%;
+        transform: translateY(0) rotate(-2deg);
+    }
+    75% {
+        left: 30%;
+        transform: translateY(-5px) rotate(2deg);
+    }
+    100% {
+        left: 10%;
+        transform: translateY(0) rotate(-2deg);
+    }
+}
+
+/* 子龙虾不同的走动节奏 */
+.lobster.sub-lobster {
+    animation: sub-lobster-walk 10s ease-in-out infinite;
+    animation-delay: 2s;
+}
+
+@keyframes sub-lobster-walk {
+    0% {
+        left: 60%;
+        transform: translateY(0) rotate(2deg) scale(0.85);
+    }
+    25% {
+        left: 70%;
+        transform: translateY(-3px) rotate(-2deg) scale(0.85);
+    }
+    50% {
+        left: 80%;
+        transform: translateY(0) rotate(2deg) scale(0.85);
+    }
+    75% {
+        left: 70%;
+        transform: translateY(-3px) rotate(-2deg) scale(0.85);
+    }
+    100% {
+        left: 60%;
+        transform: translateY(0) rotate(2deg) scale(0.85);
+    }
 }
 
 .lobster:hover {
-    transform: scale(1.05);
+    animation-play-state: paused;
+    transform: scale(1.1) !important;
 }
 
 .lobster-body {
@@ -708,15 +765,41 @@ body {
 }
 
 /* 👥 子Agent列表 */
+.sub-agents-card {
+    background: var(--card-bg);
+    border-radius: var(--border-radius);
+    padding: 20px;
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+}
+
+/* 没有子agent时缩小 */
+.sub-agents-card.empty {
+    padding: 15px;
+    opacity: 0.8;
+}
+
+.sub-agents-card.empty .sub-agents-list {
+    min-height: auto;
+}
+
 .sub-agents-list {
     min-height: 100px;
+    transition: all 0.3s ease;
+}
+
+.sub-agents-card.empty .sub-agents-list {
+    min-height: 40px;
 }
 
 .empty-text {
     color: var(--text-light);
     font-style: italic;
     text-align: center;
-    padding: 20px;
+    padding: 10px;
+    font-size: 0.9em;
+    margin: 0;
 }
 
 .sub-lobster-item {

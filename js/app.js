@@ -5,13 +5,13 @@
 
 // 小龙虾状态配置
 const LOBSTER_STATES = {
-    RESTING: { code: 'resting', icon: '💤', text: '休息中', color: '#9B59B6' },
-    WORKING: { code: 'working', icon: '🔨', text: '干活中', color: '#FF6B6B' },
-    SYNCING: { code: 'syncing', icon: '☁️', text: '同步中', color: '#3498DB' },
-    FIXING: { code: 'fixing', icon: '🔧', text: '修Bug中', color: '#E74C3C' },
-    THINKING: { code: 'thinking', icon: '💭', text: '思考中', color: '#F39C12' },
-    LEARNING: { code: 'learning', icon: '📖', text: '学习中', color: '#2ECC71' },
-    IDLE: { code: 'idle', icon: '😊', text: '待机中', color: '#95A5A6' }
+    RESTING: { code: 'resting', icon: '💤', text: '休息中', color: '#9B59B6', task: '正在休息充电...' },
+    WORKING: { code: 'working', icon: '🔨', text: '干活中', color: '#FF6B6B', task: '正在努力工作中...' },
+    SYNCING: { code: 'syncing', icon: '☁️', text: '同步中', color: '#3498DB', task: '正在同步数据...' },
+    FIXING: { code: 'fixing', icon: '🔧', text: '修Bug中', color: '#E74C3C', task: '正在紧急修复Bug...' },
+    THINKING: { code: 'thinking', icon: '💭', text: '思考中', color: '#F39C12', task: '正在深度思考...' },
+    LEARNING: { code: 'learning', icon: '📖', text: '学习中', color: '#2ECC71', task: '正在学习新技能...' },
+    IDLE: { code: 'idle', icon: '😊', text: '待机中', color: '#95A5A6', task: '等待新任务中...' }
 };
 
 // 气泡对话框内容
@@ -56,8 +56,11 @@ const SPEECH_BUBBLES = {
     ]
 };
 
-// 子Agent列表（模拟数据）
+// 子Agent列表
 let subAgents = [];
+
+// 当前状态
+let currentState = 'working';
 
 // WebSocket连接（预留接口）
 let ws = null;
@@ -68,14 +71,11 @@ let ws = null;
 function init() {
     console.log('🦞 Claw Home 初始化完成！');
     
+    // 初始化任务列表（清空mock数据）
+    initTaskList();
+    
     // 设置初始状态
-    updateMainLobsterState('working');
-    
-    // 启动定时更新
-    startAutoUpdate();
-    
-    // 模拟子Agent（实际项目中会从WebSocket获取）
-    simulateSubAgents();
+    updateMainLobsterState('idle');
     
     // 绑定事件
     bindEvents();
@@ -86,13 +86,23 @@ function init() {
     
     // 初始化昼夜模式
     initDayNightMode();
+    
+    // 初始化子agent框样式
+    updateSubAgentCardStyle();
+}
+
+/**
+ * 初始化任务列表（只保留当前状态任务）
+ */
+function initTaskList() {
+    const taskList = document.getElementById('taskList');
+    taskList.innerHTML = '';
 }
 
 /**
  * 初始化昼夜模式
  */
 function initDayNightMode() {
-    // 根据当前时间自动设置
     const hour = new Date().getHours();
     const isNight = hour < 6 || hour >= 18;
     
@@ -109,14 +119,12 @@ function toggleDayNight() {
     const isNight = document.body.classList.toggle('night-mode');
     updateDayNightButton(isNight);
     
-    // 显示切换提示
     const message = isNight ? '🌙 切换到夜间模式~ 晚安！' : '☀️ 切换到日间模式~ 早安！';
     showCustomBubble(message);
 }
 
 /**
  * 更新昼夜切换按钮状态
- * @param {boolean} isNight - 是否为夜间
  */
 function updateDayNightButton(isNight) {
     const button = document.getElementById('dayNightToggle');
@@ -136,7 +144,6 @@ function updateDayNightButton(isNight) {
 
 /**
  * 显示自定义气泡
- * @param {string} message - 消息内容
  */
 function showCustomBubble(message) {
     const bubble = document.getElementById('speechBubble');
@@ -147,7 +154,7 @@ function showCustomBubble(message) {
 }
 
 /**
- * 更新主小龙虾状态
+ * 更新主小龙虾状态 - 任务与状态强绑定
  * @param {string} stateCode - 状态代码
  */
 function updateMainLobsterState(stateCode) {
@@ -155,6 +162,13 @@ function updateMainLobsterState(stateCode) {
     const lobster = document.getElementById('mainLobster');
     const statusTag = document.getElementById('mainStatusTag');
     const mainStatus = document.getElementById('mainStatus');
+    
+    // 如果状态没变，不重复更新
+    if (currentState === state.code) {
+        return;
+    }
+    
+    currentState = state.code;
     
     // 设置状态属性
     lobster.setAttribute('data-status', state.code);
@@ -169,15 +183,48 @@ function updateMainLobsterState(stateCode) {
     // 显示气泡对话框
     showSpeechBubble(state.code);
     
-    // 添加到任务列表
-    if (state.code !== 'idle') {
-        addTask(`${state.text}`, state.icon);
+    // 更新任务列表（状态改变才更新）
+    updateTaskByState(state);
+}
+
+/**
+ * 根据状态更新任务列表
+ * @param {Object} state - 状态对象
+ */
+function updateTaskByState(state) {
+    const taskList = document.getElementById('taskList');
+    const now = new Date();
+    const timeStr = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
+    
+    // 创建新任务项
+    const taskItem = document.createElement('div');
+    taskItem.className = 'task-item active';
+    taskItem.innerHTML = `
+        <span class="task-icon">${state.icon}</span>
+        <span class="task-text">${state.task}</span>
+        <span class="task-time">${timeStr}</span>
+    `;
+    
+    // 插入到最前面
+    taskList.insertBefore(taskItem, taskList.firstChild);
+    
+    // 标记之前的任务为已完成
+    const allTasks = taskList.querySelectorAll('.task-item');
+    allTasks.forEach((item, index) => {
+        if (index > 0) {
+            item.classList.remove('active');
+            item.classList.add('completed');
+        }
+    });
+    
+    // 限制任务数量（最多显示5个）
+    while (taskList.children.length > 5) {
+        taskList.removeChild(taskList.lastChild);
     }
 }
 
 /**
  * 显示气泡对话框
- * @param {string} stateCode - 状态代码
  */
 function showSpeechBubble(stateCode) {
     const bubble = document.getElementById('speechBubble');
@@ -186,13 +233,12 @@ function showSpeechBubble(stateCode) {
     
     bubble.innerHTML = `<p>${message}</p>`;
     bubble.style.animation = 'none';
-    bubble.offsetHeight; // 触发重排
+    bubble.offsetHeight;
     bubble.style.animation = 'fade-in-out 4s ease-in-out';
 }
 
 /**
  * 互动功能
- * @param {string} action - 动作类型
  */
 function interact(action) {
     const lobster = document.getElementById('mainLobster');
@@ -206,7 +252,7 @@ function interact(action) {
         case 'feed':
             lobster.classList.add('eating');
             setTimeout(() => lobster.classList.remove('eating'), 1000);
-            showSpeechBubble('eating');
+            showCustomBubble(' yummy! 🍤');
             currentEnergy = Math.min(100, currentEnergy + 10);
             mood.textContent = '😋 饱饱的';
             break;
@@ -214,15 +260,13 @@ function interact(action) {
         case 'play':
             lobster.classList.add('happy');
             setTimeout(() => lobster.classList.remove('happy'), 1500);
-            showSpeechBubble('playing');
+            showCustomBubble('好开心！🎾');
             currentEnergy = Math.max(0, currentEnergy - 5);
             mood.textContent = '🥳 超开心';
             break;
             
         case 'pet':
-            lobster.style.transform = 'scale(1.1)';
-            setTimeout(() => lobster.style.transform = '', 300);
-            showSpeechBubble('petting');
+            showCustomBubble('好舒服~ 👋');
             mood.textContent = '🥰 被宠爱';
             break;
             
@@ -231,15 +275,11 @@ function interact(action) {
             break;
     }
     
-    // 更新能量条
     energyFill.style.width = currentEnergy + '%';
     energyText.textContent = currentEnergy + '%';
     
-    // 根据能量更新心情
     if (currentEnergy < 20) {
         mood.textContent = '😫 好累';
-    } else if (currentEnergy > 80) {
-        mood.textContent = '😊 开心';
     }
 }
 
@@ -251,8 +291,8 @@ function showSystemInfo() {
         '技能数量': '33个',
         '运行时间': document.getElementById('uptime').textContent,
         '磁盘使用率': '20%',
-        '可用空间': '45GB',
-        '子Agent数': subAgents.length + '个'
+        '子Agent数': subAgents.length + '个',
+        '当前状态': LOBSTER_STATES[currentState.toUpperCase()]?.text || '未知'
     };
     
     const bubble = document.getElementById('speechBubble');
@@ -265,20 +305,32 @@ function showSystemInfo() {
 
 /**
  * 添加子Agent龙虾
- * @param {Object} agent - Agent信息
  */
 function addSubAgent(agent) {
     subAgents.push(agent);
     renderSubAgents();
+    updateSubAgentCardStyle();
 }
 
 /**
  * 移除子Agent
- * @param {string} agentId - Agent ID
  */
 function removeSubAgent(agentId) {
     subAgents = subAgents.filter(a => a.id !== agentId);
     renderSubAgents();
+    updateSubAgentCardStyle();
+}
+
+/**
+ * 更新子agent卡片样式
+ */
+function updateSubAgentCardStyle() {
+    const card = document.querySelector('.sub-agents-card');
+    if (subAgents.length === 0) {
+        card.classList.add('empty');
+    } else {
+        card.classList.remove('empty');
+    }
 }
 
 /**
@@ -308,77 +360,10 @@ function renderSubAgents() {
 }
 
 /**
- * 模拟子Agent（演示用）
- */
-function simulateSubAgents() {
-    // 模拟添加一个子Agent
-    setTimeout(() => {
-        addSubAgent({
-            id: 'agent-1',
-            name: '小钳子 #1',
-            status: '🟢 运行中',
-            task: '搜索新技能...'
-        });
-    }, 3000);
-    
-    // 模拟移除
-    setTimeout(() => {
-        removeSubAgent('agent-1');
-    }, 15000);
-}
-
-/**
- * 添加任务到列表
- * @param {string} task - 任务描述
- * @param {string} icon - 图标
- */
-function addTask(task, icon = '✅') {
-    const taskList = document.getElementById('taskList');
-    const now = new Date();
-    const timeStr = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
-    
-    const taskItem = document.createElement('div');
-    taskItem.className = 'task-item active';
-    taskItem.innerHTML = `
-        <span class="task-icon">${icon}</span>
-        <span class="task-text">${task}</span>
-        <span class="task-time">${timeStr}</span>
-    `;
-    
-    // 插入到最前面
-    taskList.insertBefore(taskItem, taskList.firstChild);
-    
-    // 限制任务数量
-    while (taskList.children.length > 10) {
-        taskList.removeChild(taskList.lastChild);
-    }
-    
-    // 3秒后标记为完成
-    setTimeout(() => {
-        taskItem.classList.remove('active');
-        taskItem.classList.add('completed');
-    }, 3000);
-}
-
-/**
- * 自动更新状态（模拟）
- */
-function startAutoUpdate() {
-    const states = ['working', 'thinking', 'syncing', 'idle'];
-    let currentIndex = 0;
-    
-    // 每10秒切换一次状态（演示用）
-    setInterval(() => {
-        currentIndex = (currentIndex + 1) % states.length;
-        updateMainLobsterState(states[currentIndex]);
-    }, 10000);
-}
-
-/**
  * 更新运行时间
  */
 function updateUptime() {
-    const startTime = new Date('2026-03-10T12:13:00'); // 会话开始时间
+    const startTime = new Date('2026-03-10T12:13:00');
     const now = new Date();
     const diff = now - startTime;
     
@@ -392,12 +377,10 @@ function updateUptime() {
  * 绑定事件
  */
 function bindEvents() {
-    // 点击小龙虾互动
     document.getElementById('mainLobster').addEventListener('click', () => {
         interact('pet');
     });
     
-    // 键盘快捷键
     document.addEventListener('keydown', (e) => {
         switch(e.key) {
             case '1': interact('feed'); break;
@@ -409,47 +392,13 @@ function bindEvents() {
 }
 
 /**
- * WebSocket连接（预留接口）
- */
-function connectWebSocket() {
-    // 实际项目中连接到OpenClaw的后端
-    // ws = new WebSocket('ws://localhost:8080');
-    // ws.onmessage = (event) => {
-    //     const data = JSON.parse(event.data);
-    //     handleWebSocketMessage(data);
-    // };
-}
-
-/**
- * 处理WebSocket消息
- * @param {Object} data - 消息数据
- */
-function handleWebSocketMessage(data) {
-    switch(data.type) {
-        case 'status_update':
-            updateMainLobsterState(data.status);
-            break;
-        case 'subagent_add':
-            addSubAgent(data.agent);
-            break;
-        case 'subagent_remove':
-            removeSubAgent(data.agentId);
-            break;
-        case 'energy_update':
-            document.getElementById('energyFill').style.width = data.energy + '%';
-            document.getElementById('energyText').textContent = data.energy + '%';
-            break;
-    }
-}
-
-/**
  * 对外暴露的API（供OpenClaw调用）
  */
 window.ClawHomeAPI = {
     setStatus: updateMainLobsterState,
     addSubAgent: addSubAgent,
     removeSubAgent: removeSubAgent,
-    showMessage: showSpeechBubble,
+    showMessage: showCustomBubble,
     interact: interact
 };
 
