@@ -352,14 +352,14 @@ body.night-mode .weather-display {
     margin-top: 2px;
 }
 
-/* ==================== 场景 - 海洋书房 ==================== */
+/* ==================== 场景 - 写实海洋书房 ==================== */
 .scene {
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(180deg, #20B2AA 0%, #008B8B 50%, #006666 100%);
+    background: #0a1628;
     overflow: hidden;
 }
 
@@ -372,21 +372,187 @@ body.night-mode .weather-display {
     bottom: 0;
 }
 
-/* 海蓝色墙纸 */
+/* 深海蓝墙纸 - 写实纹理 */
 .ocean-wall {
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
     height: 70%;
-    background: linear-gradient(180deg, #48D1CC 0%, #20B2AA 50%, #008B8B 100%);
-    background-image: 
-        radial-gradient(circle at 20% 30%, rgba(255,255,255,0.1) 0%, transparent 50%),
-        radial-gradient(circle at 80% 70%, rgba(255,255,255,0.08) 0%, transparent 40%);
+    background: 
+        linear-gradient(180deg, #1a3a52 0%, #0d2538 50%, #081824 100%);
+    box-shadow: inset 0 -50px 100px rgba(0,0,0,0.5);
 }
 
-/* 水波纹效果 */
+/* 墙壁光泽 - 模拟水下光线 */
 .ocean-wall::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        radial-gradient(ellipse 80% 50% at 50% 0%, rgba(64,156,255,0.15) 0%, transparent 50%),
+        radial-gradient(ellipse 60% 40% at 30% 30%, rgba(100,200,255,0.08) 0%, transparent 40%);
+}
+
+/* 深海沙地地板 */
+.ocean-floor {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 30%;
+    background: 
+        linear-gradient(180deg, #c4b9a0 0%, #a69b82 30%, #7a6f5a 100%);
+    box-shadow: inset 0 20px 40px rgba(0,0,0,0.3);
+}
+
+/* 沙地细腻纹理 */
+.ocean-floor::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+        radial-gradient(circle at 20% 40%, rgba(139,125,100,0.3) 0px, transparent 2px),
+        radial-gradient(circle at 60% 60%, rgba(139,125,100,0.25) 0px, transparent 3px),
+        radial-gradient(circle at 80% 20%, rgba(139,125,100,0.2) 0px, transparent 2px),
+        radial-gradient(circle at 40% 80%, rgba(139,125,100,0.25) 0px, transparent 2px);
+    background-size: 15px 15px, 20px 20px, 18px 18px, 22px 22px;
+}
+
+/* 光线效果 - 透过海水的光束 */
+.light-rays {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        linear-gradient(120deg, transparent 40%, rgba(100,200,255,0.05) 45%, transparent 50%),
+        linear-gradient(100deg, transparent 30%, rgba(100,200,255,0.03) 35%, transparent 40%);
+    pointer-events: none;
+}
+
+/* 写实珊瑚礁书桌 */
+.coral-desk {
+    position: absolute;
+    bottom: 28%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 32%;
+    height: 70px;
+}
+
+/* 珊瑚桌面 - 写实纹理 */
+.coral-desk::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 18px;
+    background: 
+        linear-gradient(180deg, #d4756a 0%, #b85c52 50%, #9a4a42 100%);
+    border-radius: 8px 8px 4px 4px;
+    box-shadow: 
+        0 8px 25px rgba(0,0,0,0.4),
+        inset 0 2px 5px rgba(255,255,255,0.1);
+}
+
+/* 珊瑚纹理 */
+.coral-desk::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 8%;
+    right: 8%;
+    height: 52px;
+    background: 
+        linear-gradient(180deg, #c45a50 0%, #8b3d36 50%, #6b2e28 100%);
+    clip-path: polygon(15% 0%, 85% 0%, 100% 100%, 0% 100%);
+    box-shadow: inset 0 5px 15px rgba(0,0,0,0.3);
+}
+
+/* 写实笔记本电脑 */
+.laptop {
+    position: absolute;
+    bottom: 34%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90px;
+    height: 60px;
+}
+
+/* 笔记本底座 - 金属质感 */
+.laptop::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 6px;
+    background: 
+        linear-gradient(180deg, #a0a0a0 0%, #707070 50%, #505050 100%);
+    border-radius: 0 0 3px 3px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.3);
+}
+
+/* 笔记本屏幕 - 玻璃反光效果 */
+.laptop::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 5%;
+    right: 5%;
+    height: 50px;
+    background: 
+        linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #1a1a2e 100%);
+    border: 2px solid #888;
+    border-radius: 3px 3px 0 0;
+    box-shadow: 
+        inset 0 0 30px rgba(0,100,200,0.2),
+        inset -10px -10px 20px rgba(255,255,255,0.05);
+}
+
+/* 写实扇贝logo */
+.laptop-logo {
+    position: absolute;
+    top: 45%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 24px;
+    height: 24px;
+    background: 
+        linear-gradient(135deg, #ffd700 0%, #ffb347 50%, #cd853f 100%);
+    clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+    box-shadow: 
+        0 0 10px rgba(255,215,0,0.4),
+        inset 0 1px 2px rgba(255,255,255,0.5);
+    z-index: 10;
+}
+
+/* 写实木质书架 */
+.bookshelf {
+    position: absolute;
+    top: 18%;
+    left: 6%;
+    width: 16%;
+    height: 48%;
+    background: 
+        linear-gradient(90deg, #3d2914 0%, #5a3d1f 50%, #3d2914 100%);
+    border-radius: 3px;
+    box-shadow: 
+        0 10px 30px rgba(0,0,0,0.5),
+        inset 0 0 20px rgba(0,0,0,0.3);
+}
+
+/* 书架木纹 */
+.bookshelf::before {
     content: '';
     position: absolute;
     top: 0;
@@ -396,279 +562,226 @@ body.night-mode .weather-display {
     background: repeating-linear-gradient(
         0deg,
         transparent,
-        transparent 50px,
-        rgba(255,255,255,0.03) 50px,
-        rgba(255,255,255,0.03) 51px
+        transparent 10px,
+        rgba(0,0,0,0.1) 10px,
+        rgba(0,0,0,0.1) 11px
     );
-    animation: wave-move 10s linear infinite;
-}
-
-@keyframes wave-move {
-    0% { transform: translateY(0); }
-    100% { transform: translateY(50px); }
-}
-
-/* 沙滩地板 */
-.ocean-floor {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 30%;
-    background: linear-gradient(180deg, #F4A460 0%, #DEB887 50%, #D2691E 100%);
-    border-top: 4px solid #CD853F;
-}
-
-/* 沙滩纹理 */
-.ocean-floor::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-image: 
-        radial-gradient(circle at 20% 30%, rgba(139,69,19,0.1) 1px, transparent 1px),
-        radial-gradient(circle at 60% 70%, rgba(139,69,19,0.1) 1px, transparent 1px),
-        radial-gradient(circle at 80% 20%, rgba(139,69,19,0.1) 1px, transparent 1px);
-    background-size: 30px 30px, 25px 25px, 35px 35px;
-}
-
-/* 珊瑚礁书桌 */
-.coral-desk {
-    position: absolute;
-    bottom: 28%;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 35%;
-    height: 60px;
-}
-
-/* 珊瑚桌面 */
-.coral-desk::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 15px;
-    background: linear-gradient(180deg, #FF7F50 0%, #FF6347 100%);
-    border-radius: 10px 10px 5px 5px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-}
-
-/* 珊瑚桌腿 */
-.coral-desk::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 10%;
-    right: 10%;
-    height: 45px;
-    background: linear-gradient(180deg, #FF6347 0%, #CD5C5C 100%);
-    clip-path: polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%);
-}
-
-/* 笔记本电脑（扇贝logo） */
-.laptop {
-    position: absolute;
-    bottom: 33%;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 80px;
-    height: 50px;
-}
-
-/* 笔记本底座 */
-.laptop::before {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 5%;
-    right: 5%;
-    height: 8px;
-    background: linear-gradient(180deg, #C0C0C0 0%, #808080 100%);
-    border-radius: 0 0 4px 4px;
-    transform: perspective(100px) rotateX(30deg);
-}
-
-/* 笔记本屏幕 */
-.laptop::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 10%;
-    right: 10%;
-    height: 40px;
-    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-    border: 3px solid #C0C0C0;
-    border-radius: 4px 4px 0 0;
-    box-shadow: inset 0 0 20px rgba(0,150,255,0.3);
-}
-
-/* 扇贝logo */
-.laptop-logo {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 20px;
-    height: 20px;
-    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
-    clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
-    z-index: 10;
-}
-
-/* 书架 */
-.bookshelf {
-    position: absolute;
-    top: 20%;
-    left: 8%;
-    width: 18%;
-    height: 45%;
-    background: linear-gradient(90deg, #8B4513 0%, #A0522D 50%, #8B4513 100%);
-    border-radius: 5px;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+    opacity: 0.5;
 }
 
 /* 书架隔板 */
-.bookshelf::before,
-.bookshelf::after {
-    content: '';
+.shelf-level {
     position: absolute;
     left: 5%;
     right: 5%;
-    height: 8px;
-    background: #654321;
-    border-radius: 2px;
+    height: 6px;
+    background: linear-gradient(180deg, #4a3420 0%, #2a1d10 100%);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
 }
 
-.bookshelf::before { top: 30%; }
-.bookshelf::after { top: 60%; }
-
-/* 贝壳书籍 */
+/* 写实贝壳书籍 */
 .shell-book {
     position: absolute;
-    bottom: 70%;
-    width: 12%;
-    height: 25%;
-    background: linear-gradient(180deg, #FFB6C1 0%, #FFC0CB 100%);
-    border-radius: 50% 50% 50% 50% / 30% 30% 70% 70%;
-    box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+    width: 14%;
+    border-radius: 50% 50% 45% 45% / 25% 25% 75% 75%;
+    box-shadow: 
+        2px 3px 8px rgba(0,0,0,0.3),
+        inset 0 2px 5px rgba(255,255,255,0.2);
 }
 
-.shell-book:nth-child(1) { left: 10%; background: linear-gradient(180deg, #FFB6C1 0%, #FF69B4 100%); }
-.shell-book:nth-child(2) { left: 28%; height: 28%; background: linear-gradient(180deg, #87CEEB 0%, #4682B4 100%); }
-.shell-book:nth-child(3) { left: 45%; background: linear-gradient(180deg, #98FB98 0%, #3CB371 100%); }
-.shell-book:nth-child(4) { left: 62%; height: 22%; background: linear-gradient(180deg, #DDA0DD 0%, #9370DB 100%); }
-.shell-book:nth-child(5) { left: 78%; background: linear-gradient(180deg, #F0E68C 0%, #DAA520 100%); }
+/* 粉色贝壳书 */
+.shell-book.pink {
+    background: 
+        linear-gradient(180deg, #e8b4b4 0%, #c98989 50%, #a65d5d 100%);
+    height: 22%;
+}
 
-/* 窗户（舷窗样式） */
+/* 蓝色贝壳书 */
+.shell-book.blue {
+    background: 
+        linear-gradient(180deg, #a4c4d9 0%, #7a9eb5 50%, #50728a 100%);
+    height: 26%;
+}
+
+/* 绿色贝壳书 */
+.shell-book.green {
+    background: 
+        linear-gradient(180deg, #a8d5a2 0%, #7eb876 50%, #54944c 100%);
+    height: 20%;
+}
+
+/* 紫色贝壳书 */
+.shell-book.purple {
+    background: 
+        linear-gradient(180deg, #c4b5d9 0%, #9a85b5 50%, #705591 100%);
+    height: 24%;
+}
+
+/* 黄色贝壳书 */
+.shell-book.yellow {
+    background: 
+        linear-gradient(180deg, #e8d5a0 0%, #d4b876 50%, #c09b4c 100%);
+    height: 21%;
+}
+
+/* 写实舷窗窗户 */
 .porthole-window {
     position: absolute;
-    top: 18%;
-    right: 12%;
-    width: 100px;
-    height: 100px;
-    background: linear-gradient(180deg, #006994 0%, #008B8B 100%);
-    border: 8px solid #C0C0C0;
+    top: 15%;
+    right: 10%;
+    width: 120px;
+    height: 120px;
+    background: 
+        linear-gradient(180deg, #004968 0%, #006b8f 50%, #008db8 100%);
+    border: 10px solid #4a5568;
     border-radius: 50%;
     box-shadow: 
-        inset 0 0 30px rgba(0,0,0,0.3),
-        0 5px 20px rgba(0,0,0,0.3);
+        inset 0 0 50px rgba(0,0,0,0.5),
+        0 5px 25px rgba(0,0,0,0.5),
+        inset 0 0 20px rgba(100,200,255,0.2);
     overflow: hidden;
 }
 
-/* 舷窗十字 */
-.porthole-window::before,
-.porthole-window::after {
+/* 舷窗金属框高光 */
+.porthole-window::before {
     content: '';
     position: absolute;
-    background: #C0C0C0;
+    top: -5px;
+    left: -5px;
+    right: -5px;
+    bottom: -5px;
+    border: 2px solid rgba(255,255,255,0.1);
+    border-radius: 50%;
 }
 
-.porthole-window::before {
-    top: 50%;
+/* 舷窗螺栓 */
+.porthole-bolt {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background: #2d3748;
+    border-radius: 50%;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.5);
+}
+
+/* 窗外深海景色 */
+.deep-ocean-outside {
+    position: absolute;
+    top: 0;
     left: 0;
     right: 0;
-    height: 6px;
-    transform: translateY(-50%);
-}
-
-.porthole-window::after {
-    top: 0;
     bottom: 0;
-    left: 50%;
-    width: 6px;
-    transform: translateX(-50%);
+    background: 
+        radial-gradient(ellipse at 30% 70%, rgba(0,100,150,0.3) 0%, transparent 50%);
 }
 
-/* 窗外鱼群 */
-.fish-outside {
-    position: absolute;
-    top: 30%;
-    left: -20%;
-    font-size: 1.2em;
-    animation: fish-swim 8s linear infinite;
-}
-
-@keyframes fish-swim {
-    0% { left: -20%; }
-    100% { left: 120%; }
-}
-
-/* 海藻海草 */
-.seaweed-plant {
+/* 写实海藻海草 */
+.seaweed-cluster {
     position: absolute;
     bottom: 30%;
     transform-origin: bottom center;
-    animation: seaweed-sway 3s ease-in-out infinite;
 }
 
-.seaweed-plant.tall {
-    left: 5%;
-    width: 15px;
-    height: 120px;
-    background: linear-gradient(180deg, #32CD32 0%, #228B22 100%);
-    border-radius: 50% 50% 0 0;
-    animation-delay: 0s;
+.seaweed-cluster.left {
+    left: 3%;
+    animation: seaweed-sway-realistic 4s ease-in-out infinite;
 }
 
-.seaweed-plant.medium {
-    left: 12%;
-    width: 12px;
-    height: 90px;
-    background: linear-gradient(180deg, #3CB371 0%, #2E8B57 100%);
-    border-radius: 50% 50% 0 0;
-    animation-delay: 0.5s;
-}
-
-.seaweed-plant.short {
-    right: 8%;
-    width: 10px;
-    height: 70px;
-    background: linear-gradient(180deg, #2E8B57 0%, #006400 100%);
-    border-radius: 50% 50% 0 0;
+.seaweed-cluster.right {
+    right: 5%;
+    animation: seaweed-sway-realistic 5s ease-in-out infinite;
     animation-delay: 1s;
 }
 
-.seaweed-plant.curly {
-    right: 15%;
-    width: 14px;
+/* 海草叶片 */
+.seaweed-blade {
+    position: absolute;
+    bottom: 0;
+    background: linear-gradient(180deg, #2d5a3d 0%, #1a3d28 100%);
+    border-radius: 50% 50% 0 0;
+    opacity: 0.9;
+    box-shadow: inset -2px 0 5px rgba(0,0,0,0.2);
+}
+
+.seaweed-blade.tall {
+    width: 12px;
+    height: 140px;
+    left: 0;
+}
+
+.seaweed-blade.medium {
+    width: 10px;
     height: 100px;
-    background: linear-gradient(180deg, #20B2AA 0%, #008B8B 100%);
+    left: 15px;
+    background: linear-gradient(180deg, #3d6a4d 0%, #2a4d38 100%);
+}
+
+.seaweed-blade.short {
+    width: 8px;
+    height: 70px;
+    left: 28px;
+    background: linear-gradient(180deg, #4a7a5d 0%, #3a5d48 100%);
+}
+
+/* 海草随水流摆动 */
+@keyframes seaweed-sway-realistic {
+    0%, 100% { 
+        transform: rotate(-3deg); 
+    }
+    25% { 
+        transform: rotate(2deg); 
+    }
+    50% { 
+        transform: rotate(-2deg); 
+    }
+    75% { 
+        transform: rotate(4deg); 
+    }
+}
+
+/* 深海气泡粒子 */
+.bubbles-particles {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.particle-bubble {
+    position: absolute;
+    bottom: -20px;
+    background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.4), rgba(255,255,255,0.1));
     border-radius: 50%;
-    animation: seaweed-curl 4s ease-in-out infinite;
+    animation: bubble-rise-realistic 10s infinite ease-in;
 }
 
-@keyframes seaweed-sway {
-    0%, 100% { transform: rotate(-8deg); }
-    50% { transform: rotate(8deg); }
-}
-
-@keyframes seaweed-curl {
-    0%, 100% { transform: rotate(-10deg) scaleX(1); }
-    50% { transform: rotate(10deg) scaleX(0.8); }
+@keyframes bubble-rise-realistic {
+    0% { 
+        transform: translateY(0) translateX(0) scale(1); 
+        opacity: 0; 
+    }
+    10% { 
+        opacity: 0.6; 
+    }
+    25% {
+        transform: translateY(-25vh) translateX(10px) scale(1.1);
+    }
+    50% {
+        transform: translateY(-50vh) translateX(-5px) scale(1.2);
+    }
+    75% {
+        transform: translateY(-75vh) translateX(15px) scale(1.1);
+    }
+    90% { 
+        opacity: 0.4; 
+    }
+    100% { 
+        transform: translateY(-100vh) translateX(-10px) scale(0.8); 
+        opacity: 0; 
+    }
 }
 
 /* 太阳/月亮 */
