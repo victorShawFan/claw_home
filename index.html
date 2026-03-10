@@ -7,38 +7,94 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <div class="game-container">
-        <!-- 顶部状态栏 -->
-        <header class="top-bar">
-            <div class="logo">
-                <span class="lobster-icon">🦞</span>
-                <span class="title">Claw Home</span>
-            </div>
-            <div class="top-controls">
-                <!-- 🌙 昼夜切换按钮 -->
-                <button class="day-night-toggle" id="dayNightToggle" onclick="toggleDayNight()" title="切换昼夜模式">
-                    <span class="toggle-icon" id="toggleIcon">☀️</span>
-                    <span class="toggle-text" id="toggleText">日间</span>
-                </button>
-                <div class="system-status">
-                    <span class="status-indicator online"></span>
-                    <span class="status-text">在线</span>
+    <!-- 🎵 冒险岛BGM -->
+    <audio id="bgm" loop>
+        <source src="https://archive.org/download/maplestory-bgm/MapleStory%20BGM%20-%20Lith%20Harbor.mp3" type="audio/mpeg">
+    </audio>
+    
+    <!-- 音效 -->
+    <audio id="sound-feed" preload="auto">
+        <source src="https://www.soundjay.com/buttons/sounds/button-09.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="sound-play" preload="auto">
+        <source src="https://www.soundjay.com/buttons/sounds/button-10.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="sound-pet" preload="auto">
+        <source src="https://www.soundjay.com/buttons/sounds/button-29.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- 顶部横条 -->
+    <header class="top-bar">
+        <div class="logo">
+            <span class="lobster-icon">🦞</span>
+            <span class="title">Claw Home</span>
+        </div>
+        <div class="top-center">
+            <span class="system-status">
+                <span class="status-indicator online"></span>
+                <span class="status-text">在线</span>
+            </span>
+        </div>
+        <div class="top-controls">
+            <button class="music-toggle" id="musicToggle" onclick="toggleMusic()" title="播放/暂停BGM">
+                <span id="musicIcon">🎵</span>
+            </button>
+            <button class="day-night-toggle" id="dayNightToggle" onclick="toggleDayNight()" title="切换昼夜模式">
+                <span class="toggle-icon" id="toggleIcon">☀️</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- 主布局 -->
+    <div class="main-layout">
+        <!-- 左侧状态条 -->
+        <aside class="left-sidebar">
+            <div class="sidebar-section">
+                <h4>📊 状态</h4>
+                <div class="sidebar-item">
+                    <span id="mainStatus">干活中 🔨</span>
                 </div>
             </div>
-        </header>
+            <div class="sidebar-section">
+                <h4>⚡ 能量</h4>
+                <div class="energy-bar-vertical">
+                    <div class="energy-fill-vertical" id="energyFill" style="height: 85%"></div>
+                </div>
+                <span class="energy-text" id="energyText">85%</span>
+            </div>
+            <div class="sidebar-section">
+                <h4>😊 心情</h4>
+                <div class="sidebar-item" id="mood">开心</div>
+            </div>
+            <div class="sidebar-section">
+                <h4>⏱️ 运行</h4>
+                <div class="sidebar-item" id="uptime">0小时0分</div>
+            </div>
+        </aside>
 
-        <!-- 主游戏区域 -->
-        <main class="game-area">
-            <!-- 背景场景 -->
-            <div class="scene">
+        <!-- 中央游戏区域 -->
+        <main class="center-stage">
+            <!-- 天气信息（右上角） -->
+            <div class="weather-display" id="weatherDisplay">
+                <div class="weather-icon" id="weatherIcon">☀️</div>
+                <div class="weather-info">
+                    <div class="weather-temp" id="weatherTemp">--°C</div>
+                    <div class="weather-city">深圳</div>
+                    <div class="weather-desc" id="weatherDesc">加载中...</div>
+                    <div class="weather-time" id="weatherTime">--:--</div>
+                </div>
+            </div>
+
+            <!-- 场景 -->
+            <div class="scene" id="scene">
                 <div class="water-bg"></div>
                 
-                <!-- ☀️ 太阳 / 🌙 月亮 -->
-                <div class="sun"></div>
-                <div class="moon"></div>
+                <!-- 太阳/月亮 -->
+                <div class="sun" id="sun"></div>
+                <div class="moon" id="moon"></div>
                 
-                <!-- ⭐ 星星（夜间显示） -->
-                <div class="stars">
+                <!-- 星星 -->
+                <div class="stars" id="stars">
                     <div class="star"></div>
                     <div class="star"></div>
                     <div class="star"></div>
@@ -48,7 +104,18 @@
                     <div class="star"></div>
                     <div class="star"></div>
                 </div>
+
+                <!-- 天气效果层 -->
+                <div class="weather-effects" id="weatherEffects">
+                    <!-- 雨滴 -->
+                    <div class="rain-container" id="rainContainer"></div>
+                    <!-- 雪花 -->
+                    <div class="snow-container" id="snowContainer"></div>
+                    <!-- 云朵 -->
+                    <div class="clouds-container" id="cloudsContainer"></div>
+                </div>
                 
+                <!-- 气泡 -->
                 <div class="bubbles">
                     <div class="bubble"></div>
                     <div class="bubble"></div>
@@ -56,186 +123,92 @@
                     <div class="bubble"></div>
                     <div class="bubble"></div>
                 </div>
+
+                <!-- 海草 -->
                 <div class="seaweed">
                     <div class="weed"></div>
                     <div class="weed"></div>
                     <div class="weed"></div>
                 </div>
-            </div>
 
-            <!-- 小龙虾容器 -->
-            <div class="lobsters-container" id="lobstersContainer">
-                <!-- 主小龙虾 -->
-                <div class="lobster main-lobster" id="mainLobster" data-status="working">
-                    <div class="lobster-body">
-                        <div class="crown">👑</div>
-                        <div class="face">
-                            <div class="eyes">
-                                <div class="eye left">
-                                    <div class="pupil"></div>
-                                </div>
-                                <div class="eye right">
-                                    <div class="pupil"></div>
-                                </div>
-                            </div>
-                            <div class="mouth"></div>
-                            <div class="cheeks">
-                                <div class="cheek left"></div>
-                                <div class="cheek right"></div>
-                            </div>
+                <!-- 小龙虾容器 -->
+                <div class="lobsters-container" id="lobstersContainer">
+                    <!-- 主小龙虾 -->
+                    <div class="lobster main-lobster" id="mainLobster" data-status="idle">
+                        <div class="lobster-sprite">
+                            <img src="assets/lobster.svg" alt="小龙虾" class="lobster-img">
                         </div>
-                        <div class="claws">
-                            <div class="claw left">
-                                <div class="claw-arm"></div>
-                                <div class="claw-hand">🦞</div>
-                            </div>
-                            <div class="claw right">
-                                <div class="claw-arm"></div>
-                                <div class="claw-hand">🦞</div>
-                            </div>
+                        
+                        <!-- 状态标签 -->
+                        <div class="status-tag" id="mainStatusTag">
+                            <span class="status-icon">😊</span>
+                            <span class="status-text">待机中</span>
                         </div>
-                        <div class="tail">
-                            <div class="tail-segment"></div>
-                            <div class="tail-segment"></div>
-                            <div class="tail-segment"></div>
-                        </div>
-                        <div class="legs">
-                            <div class="leg"></div>
-                            <div class="leg"></div>
-                            <div class="leg"></div>
-                            <div class="leg"></div>
+
+                        <!-- 气泡对话框 -->
+                        <div class="speech-bubble" id="speechBubble">
+                            <p>欢迎来到小龙虾之家！🦞</p>
                         </div>
                     </div>
-                    
-                    <!-- 状态标签 -->
-                    <div class="status-tag" id="mainStatusTag">
-                        <span class="status-icon">🔨</span>
-                        <span class="status-text">干活中</span>
-                    </div>
 
-                    <!-- 气泡对话框 -->
-                    <div class="speech-bubble" id="speechBubble">
-                        <p>正在帮你清理Mac磁盘~ 💪</p>
-                    </div>
-                </div>
-
-                <!-- 子agent龙虾将通过JS动态添加 -->
-            </div>
-
-            <!-- 底部控制面板 -->
-            <div class="control-panel">
-                <div class="stats-card">
-                    <h3>📊 主龙虾状态</h3>
-                    <div class="stat-item">
-                        <span class="stat-label">名称:</span>
-                        <span class="stat-value">小龙虾 🦞</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-label">当前状态:</span>
-                        <span class="stat-value" id="mainStatus">干活 💪</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-label">能量:</span>
-                        <div class="energy-bar">
-                            <div class="energy-fill" id="energyFill" style="width: 85%"></div>
-                        </div>
-                        <span class="energy-text" id="energyText">85%</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-label">心情:</span>
-                        <span class="stat-value" id="mood">😊 开心</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-label">技能数:</span>
-                        <span class="stat-value">33个 ✨</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-label">运行时间:</span>
-                        <span class="stat-value" id="uptime">2小时15分</span>
-                    </div>
-                </div>
-
-                <div class="actions-card">
-                    <h3>🎮 互动</h3>
-                    <div class="action-buttons">
-                        <button class="action-btn feed" onclick="interact('feed')">
-                            <span class="btn-icon">🍤</span>
-                            <span class="btn-text">喂食</span>
-                        </button>
-                        <button class="action-btn play" onclick="interact('play')">
-                            <span class="btn-icon">🎾</span>
-                            <span class="btn-text">玩耍</span>
-                        </button>
-                        <button class="action-btn pet" onclick="interact('pet')">
-                            <span class="btn-icon">👋</span>
-                            <span class="btn-text">抚摸</span>
-                        </button>
-                        <button class="action-btn check" onclick="interact('check')">
-                            <span class="btn-icon">🔍</span>
-                            <span class="btn-text">查看</span>
-                        </button>
-                    </div>
-                </div>
-
-                <div class="sub-agents-card">
-                    <h3>👥 子Agent龙虾 <span class="count" id="subAgentCount">(0)</span></h3>
-                    <div class="sub-agents-list" id="subAgentsList">
-                        <p class="empty-text">暂无子Agent运行中...</p>
-                    </div>
+                    <!-- 子agent龙虾 -->
+                    <div class="sub-lobsters-area" id="subLobstersArea"></div>
                 </div>
             </div>
         </main>
 
-        <!-- 右侧任务面板 -->
-        <aside class="task-panel">
-            <h3>📋 最近任务</h3>
-            <div class="task-list" id="taskList">
-                <div class="task-item completed">
-                    <span class="task-icon">✅</span>
-                    <span class="task-text">Mac磁盘清理</span>
-                    <span class="task-time">14:00</span>
-                </div>
-                <div class="task-item completed">
-                    <span class="task-icon">✅</span>
-                    <span class="task-text">删除临时文件 2.8GB</span>
-                    <span class="task-time">14:30</span>
-                </div>
-                <div class="task-item completed">
-                    <span class="task-icon">✅</span>
-                    <span class="task-text">清理应用缓存 5.7GB</span>
-                    <span class="task-time">15:00</span>
-                </div>
-                <div class="task-item active">
-                    <span class="task-icon">🔄</span>
-                    <span class="task-text">等待新任务...</span>
-                    <span class="task-time">now</span>
+        <!-- 右侧状态条 -->
+        <aside class="right-sidebar">
+            <div class="sidebar-section">
+                <h4>👥 子Agent</h4>
+                <div class="sub-agents-compact" id="subAgentsCompact">
+                    <span class="empty-text">无</span>
                 </div>
             </div>
-
-            <h3>📈 今日统计</h3>
-            <div class="today-stats">
-                <div class="mini-stat">
-                    <span class="mini-label">释放空间</span>
-                    <span class="mini-value">10.8GB</span>
+            <div class="sidebar-section">
+                <h4>📋 最近任务</h4>
+                <div class="task-list-compact" id="taskListCompact">
+                    <div class="task-compact">等待任务...</div>
                 </div>
-                <div class="mini-stat">
-                    <span class="mini-label">完成任务</span>
-                    <span class="mini-value">12个</span>
-                </div>
-                <div class="mini-stat">
-                    <span class="mini-label">对话轮次</span>
-                    <span class="mini-value">48轮</span>
+            </div>
+            <div class="sidebar-section">
+                <h4>📈 今日</h4>
+                <div class="mini-stats">
+                    <div class="mini-stat">
+                        <span class="mini-label">任务</span>
+                        <span class="mini-value" id="todayTasks">0</span>
+                    </div>
+                    <div class="mini-stat">
+                        <span class="mini-label">技能</span>
+                        <span class="mini-value">33</span>
+                    </div>
                 </div>
             </div>
         </aside>
     </div>
 
-    <!-- 底部信息栏 -->
-    <footer class="footer">
-        <div class="footer-content">
-            <span>🦞 Claw Home v1.0</span>
-            <span class="separator">|</span>
-            <span>小龙虾正在为你服务</span>
+    <!-- 底部互动条 -->
+    <footer class="bottom-bar">
+        <div class="action-buttons">
+            <button class="action-btn feed" onclick="interact('feed')">
+                <span class="btn-icon">🍤</span>
+                <span class="btn-text">喂食</span>
+            </button>
+            <button class="action-btn play" onclick="interact('play')">
+                <span class="btn-icon">🎾</span>
+                <span class="btn-text">玩耍</span>
+            </button>
+            <button class="action-btn pet" onclick="interact('pet')">
+                <span class="btn-icon">👋</span>
+                <span class="btn-text">抚摸</span>
+            </button>
+            <button class="action-btn check" onclick="interact('check')">
+                <span class="btn-icon">🔍</span>
+                <span class="btn-text">查看</span>
+            </button>
+        </div>
+        <div class="footer-info">
+            <span>🦞 Claw Home v1.2</span>
             <span class="separator">|</span>
             <span id="connectionStatus" class="connected">🟢 已连接</span>
         </div>

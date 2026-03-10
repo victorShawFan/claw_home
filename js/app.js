@@ -1,78 +1,62 @@
 /**
- * 🦞 Claw Home - 小龙虾之家主逻辑
- * 实时状态面板和互动系统
+ * 🦞 Claw Home - 小龙虾之家主逻辑 v1.2
+ * 中央布局 + 天气系统 + 冒险岛BGM
  */
 
-// 小龙虾状态配置
+// 状态配置
 const LOBSTER_STATES = {
-    RESTING: { code: 'resting', icon: '💤', text: '休息中', color: '#9B59B6', task: '正在休息充电...' },
-    WORKING: { code: 'working', icon: '🔨', text: '干活中', color: '#FF6B6B', task: '正在努力工作中...' },
-    SYNCING: { code: 'syncing', icon: '☁️', text: '同步中', color: '#3498DB', task: '正在同步数据...' },
-    FIXING: { code: 'fixing', icon: '🔧', text: '修Bug中', color: '#E74C3C', task: '正在紧急修复Bug...' },
-    THINKING: { code: 'thinking', icon: '💭', text: '思考中', color: '#F39C12', task: '正在深度思考...' },
-    LEARNING: { code: 'learning', icon: '📖', text: '学习中', color: '#2ECC71', task: '正在学习新技能...' },
-    IDLE: { code: 'idle', icon: '😊', text: '待机中', color: '#95A5A6', task: '等待新任务中...' }
+    RESTING: { code: 'resting', icon: '💤', text: '休息中', color: '#9B59B6' },
+    WORKING: { code: 'working', icon: '🔨', text: '干活中', color: '#FF6B6B' },
+    SYNCING: { code: 'syncing', icon: '☁️', text: '同步中', color: '#3498DB' },
+    FIXING: { code: 'fixing', icon: '🔧', text: '修Bug中', color: '#E74C3C' },
+    THINKING: { code: 'thinking', icon: '💭', text: '思考中', color: '#F39C12' },
+    LEARNING: { code: 'learning', icon: '📖', text: '学习中', color: '#2ECC71' },
+    IDLE: { code: 'idle', icon: '😊', text: '待机中', color: '#95A5A6' }
 };
 
-// 气泡对话框内容
+// 气泡内容
 const SPEECH_BUBBLES = {
-    resting: [
-        '呼...让我睡一会儿 💤',
-        '充电中，请勿打扰 🔋',
-        '做个好梦... 🌙'
-    ],
-    working: [
-        '正在努力工作中！💪',
-        '这个任务交给我吧！✨',
-        '代码写起来~ 🖥️',
-        '让我想想怎么解决... 🤔'
-    ],
-    syncing: [
-        '同步数据中... ☁️',
-        '备份很重要哦！💾',
-        '和云端通话中... 📡'
-    ],
-    fixing: [
-        '啊！有个Bug！🐛',
-        '正在紧急修复中... 🔧',
-        '这个问题有点棘手... 😅',
-        '修Bug修到头秃... 💇'
-    ],
-    thinking: [
-        '让我深度思考一下... 🧠',
-        '这个逻辑有点复杂... 🤯',
-        '灵感快来吧！💡'
-    ],
-    learning: [
-        '学习新技能中！📚',
-        '这个技能好有意思~ ✨',
-        '知识就是力量！💪'
-    ],
-    idle: [
-        '好无聊啊... 🥱',
-        '有什么我可以帮忙的吗？🙋',
-        '我在等待任务中~ ⏳',
-        '要不要和我玩一会儿？🎮'
-    ]
+    resting: ['呼...让我睡一会儿 💤', '充电中... 🔋', '做个好梦... 🌙'],
+    working: ['正在努力工作中！💪', '这个任务交给我吧！✨', '代码写起来~ 🖥️'],
+    syncing: ['同步数据中... ☁️', '备份很重要哦！💾'],
+    fixing: ['啊！有个Bug！🐛', '正在紧急修复中... 🔧', '修Bug修到头秃... 💇'],
+    thinking: ['让我深度思考一下... 🧠', '灵感快来吧！💡'],
+    learning: ['学习新技能中！📚', '知识就是力量！💪'],
+    idle: ['有什么可以帮忙的吗？🙋', '我在等待任务中~ ⏳']
 };
 
-// 子Agent列表
+// 天气图标映射
+const WEATHER_ICONS = {
+    '晴': '☀️',
+    '多云': '⛅',
+    '阴': '☁️',
+    '小雨': '🌦️',
+    '中雨': '🌧️',
+    '大雨': '⛈️',
+    '暴雨': '⛈️',
+    '雪': '❄️',
+    '雾': '🌫️',
+    '霾': '😷'
+};
+
+// 全局状态
+let currentState = 'idle';
 let subAgents = [];
-
-// 当前状态
-let currentState = 'working';
-
-// WebSocket连接（预留接口）
-let ws = null;
+let tasks = [];
+let isMusicPlaying = false;
+let currentWeather = null;
 
 /**
- * 初始化应用
+ * 初始化
  */
 function init() {
-    console.log('🦞 Claw Home 初始化完成！');
+    console.log('🦞 Claw Home v1.2 初始化完成！');
     
-    // 初始化任务列表（清空mock数据）
-    initTaskList();
+    // 初始化昼夜模式
+    initDayNightMode();
+    
+    // 初始化天气
+    initWeather();
     
     // 设置初始状态
     updateMainLobsterState('idle');
@@ -83,20 +67,6 @@ function init() {
     // 更新运行时间
     updateUptime();
     setInterval(updateUptime, 60000);
-    
-    // 初始化昼夜模式
-    initDayNightMode();
-    
-    // 初始化子agent框样式
-    updateSubAgentCardStyle();
-}
-
-/**
- * 初始化任务列表（只保留当前状态任务）
- */
-function initTaskList() {
-    const taskList = document.getElementById('taskList');
-    taskList.innerHTML = '';
 }
 
 /**
@@ -118,44 +88,269 @@ function initDayNightMode() {
 function toggleDayNight() {
     const isNight = document.body.classList.toggle('night-mode');
     updateDayNightButton(isNight);
-    
-    const message = isNight ? '🌙 切换到夜间模式~ 晚安！' : '☀️ 切换到日间模式~ 早安！';
-    showCustomBubble(message);
+    showBubble(isNight ? '🌙 切换到夜间模式~' : '☀️ 切换到日间模式~');
+}
+
+function updateDayNightButton(isNight) {
+    const icon = document.getElementById('toggleIcon');
+    icon.textContent = isNight ? '🌙' : '☀️';
 }
 
 /**
- * 更新昼夜切换按钮状态
+ * BGM控制
  */
-function updateDayNightButton(isNight) {
-    const button = document.getElementById('dayNightToggle');
-    const icon = document.getElementById('toggleIcon');
-    const text = document.getElementById('toggleText');
+function toggleMusic() {
+    const bgm = document.getElementById('bgm');
+    const btn = document.getElementById('musicToggle');
+    const icon = document.getElementById('musicIcon');
     
-    if (isNight) {
-        button.classList.add('night');
-        icon.textContent = '🌙';
-        text.textContent = '夜间';
+    if (isMusicPlaying) {
+        bgm.pause();
+        isMusicPlaying = false;
+        btn.classList.remove('playing');
+        icon.textContent = '🎵';
+        showBubble('音乐已暂停 🎵');
     } else {
-        button.classList.remove('night');
-        icon.textContent = '☀️';
-        text.textContent = '日间';
+        bgm.volume = 0.3;
+        bgm.play().catch(e => {
+            console.log('音乐播放失败:', e);
+            showBubble('音乐播放失败，请检查网络');
+        });
+        isMusicPlaying = true;
+        btn.classList.add('playing');
+        icon.textContent = '🎶';
+        showBubble('冒险岛BGM开始播放 🎶');
     }
 }
 
 /**
- * 显示自定义气泡
+ * 天气系统
  */
-function showCustomBubble(message) {
-    const bubble = document.getElementById('speechBubble');
-    bubble.innerHTML = `<p>${message}</p>`;
-    bubble.style.animation = 'none';
-    bubble.offsetHeight;
-    bubble.style.animation = 'fade-in-out 3s ease-in-out';
+function initWeather() {
+    // 立即获取一次天气
+    fetchWeather();
+    
+    // 设置定时更新：0点、8点、12点、19点
+    scheduleWeatherUpdates();
+    
+    // 每分钟检查是否需要更新
+    setInterval(checkWeatherUpdate, 60000);
 }
 
 /**
- * 更新主小龙虾状态 - 任务与状态强绑定
- * @param {string} stateCode - 状态代码
+ * 获取深圳天气
+ */
+async function fetchWeather() {
+    try {
+        // 使用 wttr.in API（无需key）
+        const response = await fetch('https://wttr.in/Shenzhen?format=%C|%t|%c', {
+            mode: 'cors',
+            headers: { 'Accept': 'text/plain' }
+        });
+        
+        if (!response.ok) throw new Error('获取天气失败');
+        
+        const data = await response.text();
+        const [condition, temp] = data.split('|');
+        
+        updateWeatherDisplay(condition.trim(), temp.trim());
+    } catch (error) {
+        console.error('天气获取失败:', error);
+        // 使用备用API
+        fetchWeatherBackup();
+    }
+}
+
+/**
+ * 备用天气API
+ */
+async function fetchWeatherBackup() {
+    try {
+        // 使用 Open-Meteo（免费，无需key）
+        const response = await fetch(
+            'https://api.open-meteo.com/v1/forecast?latitude=22.54&longitude=114.06&current_weather=true'
+        );
+        
+        if (!response.ok) throw new Error('备用API失败');
+        
+        const data = await response.json();
+        const weatherCode = data.current_weather.weathercode;
+        const temp = Math.round(data.current_weather.temperature);
+        
+        const condition = weatherCodeToCondition(weatherCode);
+        updateWeatherDisplay(condition, `${temp}°C`);
+    } catch (error) {
+        console.error('备用天气API也失败:', error);
+        updateWeatherDisplay('未知', '--°C');
+    }
+}
+
+/**
+ * 天气代码转描述
+ */
+function weatherCodeToCondition(code) {
+    const codes = {
+        0: '晴', 1: '晴', 2: '多云', 3: '阴',
+        45: '雾', 48: '雾',
+        51: '小雨', 53: '小雨', 55: '中雨',
+        61: '小雨', 63: '中雨', 65: '大雨',
+        71: '雪', 73: '雪', 75: '雪',
+        95: '暴雨', 96: '暴雨', 99: '暴雨'
+    };
+    return codes[code] || '多云';
+}
+
+/**
+ * 更新天气显示
+ */
+function updateWeatherDisplay(condition, temp) {
+    currentWeather = condition;
+    
+    const iconEl = document.getElementById('weatherIcon');
+    const tempEl = document.getElementById('weatherTemp');
+    const descEl = document.getElementById('weatherDesc');
+    const timeEl = document.getElementById('weatherTime');
+    
+    // 获取图标
+    let icon = WEATHER_ICONS[condition] || '🌡️';
+    iconEl.textContent = icon;
+    
+    // 更新温度和描述
+    tempEl.textContent = temp;
+    descEl.textContent = condition;
+    
+    // 更新时间
+    const now = new Date();
+    timeEl.textContent = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')} 更新`;
+    
+    // 应用天气效果
+    applyWeatherEffects(condition);
+    
+    console.log(`🌤️ 天气更新: ${condition} ${temp}`);
+}
+
+/**
+ * 应用天气效果
+ */
+function applyWeatherEffects(condition) {
+    // 清除所有效果
+    document.getElementById('rainContainer').classList.remove('active');
+    document.getElementById('snowContainer').classList.remove('active');
+    document.getElementById('cloudsContainer').classList.remove('active');
+    document.getElementById('scene').classList.remove('thunder');
+    
+    // 根据天气应用效果
+    if (condition.includes('雨')) {
+        document.getElementById('rainContainer').classList.add('active');
+        createRaindrops();
+        
+        // 雷暴效果
+        if (condition.includes('暴') || condition.includes('大')) {
+            document.getElementById('scene').classList.add('thunder');
+        }
+    } else if (condition.includes('雪')) {
+        document.getElementById('snowContainer').classList.add('active');
+        createSnowflakes();
+    } else if (condition.includes('云') || condition.includes('阴')) {
+        document.getElementById('cloudsContainer').classList.add('active');
+        createClouds();
+    }
+}
+
+/**
+ * 创建雨滴
+ */
+function createRaindrops() {
+    const container = document.getElementById('rainContainer');
+    container.innerHTML = '';
+    
+    for (let i = 0; i < 100; i++) {
+        const drop = document.createElement('div');
+        drop.className = 'raindrop';
+        drop.style.left = Math.random() * 100 + '%';
+        drop.style.animationDuration = (Math.random() * 0.5 + 0.5) + 's';
+        drop.style.animationDelay = Math.random() * 2 + 's';
+        container.appendChild(drop);
+    }
+}
+
+/**
+ * 创建雪花
+ */
+function createSnowflakes() {
+    const container = document.getElementById('snowContainer');
+    container.innerHTML = '';
+    
+    for (let i = 0; i < 50; i++) {
+        const flake = document.createElement('div');
+        flake.className = 'snowflake';
+        flake.textContent = '❄';
+        flake.style.left = Math.random() * 100 + '%';
+        flake.style.fontSize = (Math.random() * 10 + 10) + 'px';
+        flake.style.animationDuration = (Math.random() * 3 + 3) + 's';
+        flake.style.animationDelay = Math.random() * 5 + 's';
+        container.appendChild(flake);
+    }
+}
+
+/**
+ * 创建云朵
+ */
+function createClouds() {
+    const container = document.getElementById('cloudsContainer');
+    container.innerHTML = '';
+    
+    for (let i = 0; i < 5; i++) {
+        const cloud = document.createElement('div');
+        cloud.className = 'cloud';
+        cloud.style.width = (Math.random() * 100 + 100) + 'px';
+        cloud.style.height = (Math.random() * 30 + 40) + 'px';
+        cloud.style.top = (Math.random() * 30 + 10) + '%';
+        cloud.style.animationDuration = (Math.random() * 20 + 20) + 's';
+        cloud.style.animationDelay = (Math.random() * -20) + 's';
+        container.appendChild(cloud);
+    }
+}
+
+/**
+ * 设置天气定时更新
+ */
+function scheduleWeatherUpdates() {
+    const updateTimes = [0, 8, 12, 19]; // 0点, 8点, 12点, 19点
+    
+    updateTimes.forEach(hour => {
+        const now = new Date();
+        const updateTime = new Date();
+        updateTime.setHours(hour, 0, 0, 0);
+        
+        if (updateTime <= now) {
+            updateTime.setDate(updateTime.getDate() + 1);
+        }
+        
+        const delay = updateTime - now;
+        setTimeout(() => {
+            fetchWeather();
+            scheduleWeatherUpdates(); // 递归设置下一天
+        }, delay);
+    });
+}
+
+/**
+ * 检查是否需要更新天气
+ */
+function checkWeatherUpdate() {
+    const now = new Date();
+    const hour = now.getHours();
+    const minute = now.getMinutes();
+    
+    // 在0,8,12,19点的0分更新
+    if ([0, 8, 12, 19].includes(hour) && minute === 0) {
+        fetchWeather();
+    }
+}
+
+/**
+ * 更新主龙虾状态
  */
 function updateMainLobsterState(stateCode) {
     const state = LOBSTER_STATES[stateCode.toUpperCase()] || LOBSTER_STATES.IDLE;
@@ -163,111 +358,67 @@ function updateMainLobsterState(stateCode) {
     const statusTag = document.getElementById('mainStatusTag');
     const mainStatus = document.getElementById('mainStatus');
     
-    // 如果状态没变，不重复更新
-    if (currentState === state.code) {
-        return;
-    }
-    
+    if (currentState === state.code) return;
     currentState = state.code;
     
-    // 设置状态属性
     lobster.setAttribute('data-status', state.code);
-    
-    // 更新状态标签
     statusTag.innerHTML = `<span class="status-icon">${state.icon}</span><span class="status-text">${state.text}</span>`;
     statusTag.style.background = state.color;
-    
-    // 更新控制面板状态
     mainStatus.textContent = `${state.text} ${state.icon}`;
     
-    // 显示气泡对话框
-    showSpeechBubble(state.code);
-    
-    // 更新任务列表（状态改变才更新）
-    updateTaskByState(state);
+    showStateBubble(state.code);
+    addTask(state.text, state.icon);
 }
 
 /**
- * 根据状态更新任务列表
- * @param {Object} state - 状态对象
+ * 显示状态气泡
  */
-function updateTaskByState(state) {
-    const taskList = document.getElementById('taskList');
-    const now = new Date();
-    const timeStr = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
-    
-    // 创建新任务项
-    const taskItem = document.createElement('div');
-    taskItem.className = 'task-item active';
-    taskItem.innerHTML = `
-        <span class="task-icon">${state.icon}</span>
-        <span class="task-text">${state.task}</span>
-        <span class="task-time">${timeStr}</span>
-    `;
-    
-    // 插入到最前面
-    taskList.insertBefore(taskItem, taskList.firstChild);
-    
-    // 标记之前的任务为已完成
-    const allTasks = taskList.querySelectorAll('.task-item');
-    allTasks.forEach((item, index) => {
-        if (index > 0) {
-            item.classList.remove('active');
-            item.classList.add('completed');
-        }
-    });
-    
-    // 限制任务数量（最多显示5个）
-    while (taskList.children.length > 5) {
-        taskList.removeChild(taskList.lastChild);
-    }
-}
-
-/**
- * 显示气泡对话框
- */
-function showSpeechBubble(stateCode) {
-    const bubble = document.getElementById('speechBubble');
+function showStateBubble(stateCode) {
     const messages = SPEECH_BUBBLES[stateCode] || SPEECH_BUBBLES.idle;
     const message = messages[Math.floor(Math.random() * messages.length)];
-    
+    showBubble(message);
+}
+
+/**
+ * 显示气泡
+ */
+function showBubble(message) {
+    const bubble = document.getElementById('speechBubble');
     bubble.innerHTML = `<p>${message}</p>`;
-    bubble.style.animation = 'none';
-    bubble.offsetHeight;
-    bubble.style.animation = 'fade-in-out 4s ease-in-out';
+    bubble.classList.remove('show');
+    void bubble.offsetWidth;
+    bubble.classList.add('show');
 }
 
 /**
  * 互动功能
  */
 function interact(action) {
-    const lobster = document.getElementById('mainLobster');
     const energyFill = document.getElementById('energyFill');
     const energyText = document.getElementById('energyText');
     const mood = document.getElementById('mood');
     
-    let currentEnergy = parseInt(energyText.textContent);
+    let currentEnergy = parseInt(energyText.textContent) || 50;
+    
+    // 播放音效
+    playSound(action);
     
     switch(action) {
         case 'feed':
-            lobster.classList.add('eating');
-            setTimeout(() => lobster.classList.remove('eating'), 1000);
-            showCustomBubble(' yummy! 🍤');
+            showBubble(' yummy! 🍤');
             currentEnergy = Math.min(100, currentEnergy + 10);
-            mood.textContent = '😋 饱饱的';
+            mood.textContent = '饱饱的';
             break;
             
         case 'play':
-            lobster.classList.add('happy');
-            setTimeout(() => lobster.classList.remove('happy'), 1500);
-            showCustomBubble('好开心！🎾');
+            showBubble('好开心！🎾');
             currentEnergy = Math.max(0, currentEnergy - 5);
-            mood.textContent = '🥳 超开心';
+            mood.textContent = '超开心';
             break;
             
         case 'pet':
-            showCustomBubble('好舒服~ 👋');
-            mood.textContent = '🥰 被宠爱';
+            showBubble('好舒服~ 👋');
+            mood.textContent = '被宠爱';
             break;
             
         case 'check':
@@ -275,11 +426,21 @@ function interact(action) {
             break;
     }
     
-    energyFill.style.width = currentEnergy + '%';
+    energyFill.style.height = currentEnergy + '%';
     energyText.textContent = currentEnergy + '%';
     
-    if (currentEnergy < 20) {
-        mood.textContent = '😫 好累';
+    if (currentEnergy < 20) mood.textContent = '好累';
+}
+
+/**
+ * 播放音效
+ */
+function playSound(action) {
+    const sound = document.getElementById('sound-' + action);
+    if (sound) {
+        sound.volume = 0.3;
+        sound.currentTime = 0;
+        sound.play().catch(() => {});
     }
 }
 
@@ -290,73 +451,80 @@ function showSystemInfo() {
     const info = {
         '技能数量': '33个',
         '运行时间': document.getElementById('uptime').textContent,
-        '磁盘使用率': '20%',
         '子Agent数': subAgents.length + '个',
+        '当前天气': currentWeather || '加载中',
         '当前状态': LOBSTER_STATES[currentState.toUpperCase()]?.text || '未知'
     };
     
+    const html = Object.entries(info).map(([k, v]) => `<p>${k}: ${v}</p>`).join('');
     const bubble = document.getElementById('speechBubble');
-    bubble.innerHTML = `
-        <p><strong>📊 系统状态</strong></p>
-        ${Object.entries(info).map(([k, v]) => `<p>${k}: ${v}</p>`).join('')}
-    `;
-    bubble.style.animation = 'fade-in-out 5s ease-in-out';
+    bubble.innerHTML = `<p><strong>📊 系统状态</strong></p>${html}`;
+    bubble.classList.remove('show');
+    void bubble.offsetWidth;
+    bubble.classList.add('show');
 }
 
 /**
- * 添加子Agent龙虾
+ * 添加任务
+ */
+function addTask(taskText, icon) {
+    const now = new Date();
+    const timeStr = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
+    
+    tasks.unshift({ text: taskText, icon, time: timeStr });
+    if (tasks.length > 5) tasks.pop();
+    
+    renderTasks();
+    updateTodayStats();
+}
+
+/**
+ * 渲染任务列表
+ */
+function renderTasks() {
+    const container = document.getElementById('taskListCompact');
+    
+    if (tasks.length === 0) {
+        container.innerHTML = '<div class="task-compact">等待任务...</div>';
+        return;
+    }
+    
+    container.innerHTML = tasks.map(t => 
+        `<div class="task-compact">${t.icon} ${t.text}</div>`
+    ).join('');
+}
+
+/**
+ * 更新今日统计
+ */
+function updateTodayStats() {
+    document.getElementById('todayTasks').textContent = tasks.length;
+}
+
+/**
+ * 子Agent管理
  */
 function addSubAgent(agent) {
     subAgents.push(agent);
     renderSubAgents();
-    updateSubAgentCardStyle();
 }
 
-/**
- * 移除子Agent
- */
 function removeSubAgent(agentId) {
     subAgents = subAgents.filter(a => a.id !== agentId);
     renderSubAgents();
-    updateSubAgentCardStyle();
 }
 
-/**
- * 更新子agent卡片样式
- */
-function updateSubAgentCardStyle() {
-    const card = document.querySelector('.sub-agents-card');
-    if (subAgents.length === 0) {
-        card.classList.add('empty');
-    } else {
-        card.classList.remove('empty');
-    }
-}
-
-/**
- * 渲染子Agent列表
- */
 function renderSubAgents() {
-    const container = document.getElementById('subAgentsList');
-    const countEl = document.getElementById('subAgentCount');
-    
-    countEl.textContent = `(${subAgents.length})`;
+    const container = document.getElementById('subAgentsCompact');
     
     if (subAgents.length === 0) {
-        container.innerHTML = '<p class="empty-text">暂无子Agent运行中...</p>';
+        container.innerHTML = '<span class="empty-text">无</span>';
         return;
     }
     
-    container.innerHTML = subAgents.map(agent => `
-        <div class="sub-lobster-item" data-id="${agent.id}">
-            <span class="sub-lobster-avatar">🦞</span>
-            <div class="sub-lobster-info">
-                <div class="sub-lobster-name">${agent.name}</div>
-                <div class="sub-lobster-status">${agent.status}</div>
-                <div class="sub-lobster-task">${agent.task || '待机中'}</div>
-            </div>
-        </div>
-    `).join('');
+    container.innerHTML = subAgents.map(a => 
+        `<div class="sub-agent-mini">🦞 ${a.name}</div>`
+    ).join('');
 }
 
 /**
@@ -377,30 +545,34 @@ function updateUptime() {
  * 绑定事件
  */
 function bindEvents() {
+    // 点击龙虾
     document.getElementById('mainLobster').addEventListener('click', () => {
         interact('pet');
     });
     
+    // 键盘快捷键
     document.addEventListener('keydown', (e) => {
         switch(e.key) {
             case '1': interact('feed'); break;
             case '2': interact('play'); break;
             case '3': interact('pet'); break;
             case '4': interact('check'); break;
+            case 'm': toggleMusic(); break;
         }
     });
 }
 
 /**
- * 对外暴露的API（供OpenClaw调用）
+ * 对外API
  */
 window.ClawHomeAPI = {
     setStatus: updateMainLobsterState,
     addSubAgent: addSubAgent,
     removeSubAgent: removeSubAgent,
-    showMessage: showCustomBubble,
-    interact: interact
+    showMessage: showBubble,
+    interact: interact,
+    refreshWeather: fetchWeather
 };
 
-// 页面加载完成后初始化
+// 初始化
 document.addEventListener('DOMContentLoaded', init);
