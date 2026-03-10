@@ -702,8 +702,8 @@ body.night-mode .stars {
 }
 
 .lobster-sprite {
-    width: 250px;
-    height: 350px;
+    width: 260px;
+    height: 380px;
     animation: lobster-walk 8s ease-in-out infinite;
     filter: drop-shadow(0 15px 30px rgba(0, 0, 0, 0.3));
 }
