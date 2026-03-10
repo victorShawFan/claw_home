@@ -49,8 +49,11 @@ let currentWeather = null;
 /**
  * 初始化
  */
-function init() {
+async function init() {
     console.log('🦞 Claw Home v1.2 初始化完成！');
+    
+    // 加载龙虾SVG
+    await loadLobsterSVG();
     
     // 初始化昼夜模式
     initDayNightMode();
@@ -70,6 +73,20 @@ function init() {
     // 更新运行时间
     updateUptime();
     setInterval(updateUptime, 60000);
+}
+
+/**
+ * 加载龙虾SVG
+ */
+async function loadLobsterSVG() {
+    try {
+        const response = await fetch('assets/lobster.svg');
+        const svgText = await response.text();
+        document.getElementById('lobsterSprite').innerHTML = svgText;
+        console.log('✅ Q版龙虾加载完成');
+    } catch (error) {
+        console.error('加载龙虾SVG失败:', error);
+    }
 }
 
 /**
@@ -508,16 +525,39 @@ function removeSubAgent(agentId) {
     renderSubAgents();
 }
 
-function renderSubAgents() {
-    const container = document.getElementById('subAgentsCompact');
+async function renderSubAgents() {
+    const compactContainer = document.getElementById('subAgentsCompact');
+    const visualContainer = document.getElementById('subLobstersArea');
+    
+    // 更新侧边栏紧凑显示
+    if (subAgents.length === 0) {
+        compactContainer.innerHTML = '<span class="empty-text">无</span>';
+    } else {
+        compactContainer.innerHTML = subAgents.map(a => 
+            `<div class="sub-agent-mini">🦞 ${a.name}</div>`
+        ).join('');
+    }
+    
+    // 更新场景中的视觉显示
+    if (!visualContainer) return;
     
     if (subAgents.length === 0) {
-        container.innerHTML = '<span class="empty-text">无</span>';
+        visualContainer.innerHTML = '';
         return;
     }
     
-    container.innerHTML = subAgents.map(a => 
-        `<div class="sub-agent-mini">🦞 ${a.name}</div>`
+    // 加载SVG用于子龙虾
+    let svgText = '';
+    try {
+        const response = await fetch('assets/lobster.svg');
+        svgText = await response.text();
+    } catch (e) {
+        console.error('加载子龙虾SVG失败:', e);
+        return;
+    }
+    
+    visualContainer.innerHTML = subAgents.map((a, index) => 
+        `<div class="sub-lobster" style="animation-delay: -${index * 3}s">${svgText}</div>`
     ).join('');
 }
 

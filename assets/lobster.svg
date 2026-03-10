@@ -1,160 +1,279 @@
-<!-- 🦞 小龙虾SVG图标 - 精细版 -->
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 240">
+<!-- 🦞 Q版小龙虾SVG - 带关节摆动动画 -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 400" id="qlobster">
   <defs>
-    <!-- 身体渐变 -->
-    <linearGradient id="bodyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#FF6B6B"/>
-      <stop offset="50%" style="stop-color:#EE5A5A"/>
-      <stop offset="100%" style="stop-color:#CC4444"/>
-    </linearGradient>
+    <!-- 红色渐变 - 身体主体 -->
+    <radialGradient id="bodyGrad" cx="40%" cy="30%" r="70%">
+      <stop offset="0%" style="stop-color:#FF7A7A"/>
+      <stop offset="50%" style="stop-color:#FF5252"/>
+      <stop offset="100%" style="stop-color:#D32F2F"/>
+    </radialGradient>
     
     <!-- 头部高光 -->
-    <radialGradient id="headHighlight" cx="30%" cy="30%" r="50%">
-      <stop offset="0%" style="stop-color:#FF8A8A"/>
+    <radialGradient id="headGrad" cx="30%" cy="20%" r="60%">
+      <stop offset="0%" style="stop-color:#FF9999"/>
       <stop offset="100%" style="stop-color:#FF6B6B"/>
     </radialGradient>
     
     <!-- 螯渐变 -->
     <linearGradient id="clawGrad" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" style="stop-color:#FF6B6B"/>
-      <stop offset="100%" style="stop-color:#CC4444"/>
+      <stop offset="100%" style="stop-color:#C62828"/>
     </linearGradient>
     
     <!-- 尾巴渐变 -->
     <linearGradient id="tailGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" style="stop-color:#EE5A5A"/>
-      <stop offset="100%" style="stop-color:#AA3333"/>
+      <stop offset="0%" style="stop-color:#FF6B6B"/>
+      <stop offset="100%" style="stop-color:#B71C1C"/>
     </linearGradient>
     
     <!-- 眼睛渐变 -->
-    <radialGradient id="eyeGrad" cx="40%" cy="40%" r="60%">
-      <stop offset="0%" style="stop-color:#4a4a4a"/>
-      <stop offset="70%" style="stop-color:#1a1a1a"/>
-      <stop offset="100%" style="stop-color:#000"/>
+    <radialGradient id="eyeGrad" cx="35%" cy="35%" r="60%">
+      <stop offset="0%" style="stop-color:#333"/>
+      <stop offset="80%" style="stop-color:#000"/>
+      <stop offset="100%" style="stop-color:#111"/>
     </radialGradient>
     
-    <!-- 阴影 -->
-    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
-      <feDropShadow dx="2" dy="4" stdDeviation="3" flood-color="#000" flood-opacity="0.2"/>
+    <!-- 阴影滤镜 -->
+    <filter id="dropShadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="3" dy="5" stdDeviation="4" flood-color="#000" flood-opacity="0.3"/>
+    </filter>
+    
+    <!-- 高光 -->
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
     </filter>
   </defs>
   
-  <!-- 触须 (放在最底层) -->
-  <path d="M 70 50 Q 50 20 30 10" stroke="#FF6B6B" stroke-width="3" fill="none" stroke-linecap="round"/>
-  <path d="M 130 50 Q 150 20 170 10" stroke="#FF6B6B" stroke-width="3" fill="none" stroke-linecap="round"/>
-  <path d="M 75 55 Q 55 35 40 25" stroke="#EE5A5A" stroke-width="2" fill="none" stroke-linecap="round"/>
-  <path d="M 125 55 Q 145 35 160 25" stroke="#EE5A5A" stroke-width="2" fill="none" stroke-linecap="round"/>
-  
-  <!-- 尾巴 (分段更细) -->
-  <g filter="url(#shadow)">
-    <!-- 尾节1 (最大) -->
-    <ellipse cx="100" cy="200" rx="35" ry="25" fill="url(#tailGrad)"/>
-    <ellipse cx="100" cy="200" rx="25" ry="18" fill="none" stroke="#AA3333" stroke-width="1" opacity="0.3"/>
+  <!-- 整体分组，用于整体动画 -->
+  <g id="lobsterBody" filter="url(#dropShadow)">
     
-    <!-- 尾节2 -->
-    <ellipse cx="100" cy="175" rx="30" ry="22" fill="url(#tailGrad)"/>
-    <ellipse cx="100" cy="175" rx="22" ry="16" fill="none" stroke="#AA3333" stroke-width="1" opacity="0.3"/>
-    
-    <!-- 尾节3 -->
-    <ellipse cx="100" cy="152" rx="26" ry="19" fill="url(#tailGrad)"/>
-    
-    <!-- 尾节4 (连接身体) -->
-    <ellipse cx="100" cy="130" rx="22" ry="16" fill="url(#tailGrad)"/>
-  </g>
-  
-  <!-- 后腿 -->
-  <g fill="#CC4444">
-    <ellipse cx="75" cy="140" rx="6" ry="18" transform="rotate(-20 75 140)"/>
-    <ellipse cx="125" cy="140" rx="6" ry="18" transform="rotate(20 125 140)"/>
-    <ellipse cx="78" cy="160" rx="5" ry="15" transform="rotate(-15 78 160)"/>
-    <ellipse cx="122" cy="160" rx="5" ry="15" transform="rotate(15 122 160)"/>
-  </g>
-  
-  <!-- 身体主体 -->
-  <g filter="url(#shadow)">
-    <!-- 身体 -->
-    <ellipse cx="100" cy="95" rx="48" ry="42" fill="url(#bodyGrad)"/>
-    <!-- 腹部纹理 -->
-    <path d="M 70 110 Q 100 120 130 110" stroke="#CC4444" stroke-width="2" fill="none" opacity="0.4"/>
-    <path d="M 75 100 Q 100 108 125 100" stroke="#CC4444" stroke-width="2" fill="none" opacity="0.4"/>
-  </g>
-  
-  <!-- 螯 (更精细) -->
-  <g filter="url(#shadow)">
-    <!-- 左螯臂 -->
-    <path d="M 60 90 Q 35 70 25 50" stroke="url(#clawGrad)" stroke-width="10" fill="none" stroke-linecap="round"/>
-    <path d="M 60 90 Q 40 75 32 58" stroke="#FF8A8A" stroke-width="4" fill="none" stroke-linecap="round"/>
-    
-    <!-- 左螯钳 -->
-    <g transform="translate(25, 50) rotate(-20)">
-      <!-- 螯主体 -->
-      <ellipse cx="0" cy="0" rx="18" ry="22" fill="url(#clawGrad)"/>
-      <!-- 螯尖 -->
-      <path d="M -12 -15 L -18 -25 L -8 -18 Z" fill="#CC4444"/>
-      <path d="M 12 -15 L 18 -25 L 8 -18 Z" fill="#CC4444"/>
-      <!-- 螯内白 -->
-      <ellipse cx="0" cy="-5" rx="10" ry="12" fill="#FFE4E1"/>
-      <path d="M -8 -8 Q 0 0 8 -8" stroke="#CC4444" stroke-width="2" fill="none"/>
+    <!-- ========== 虾须（长且自然垂下） ========== -->
+    <g id="whiskers">
+      <!-- 左虾须 -->
+      <path d="M 110 120 Q 80 180 70 280 Q 65 320 75 350" 
+            stroke="#FF5252" stroke-width="4" fill="none" stroke-linecap="round">
+        <animate attributeName="d" 
+                 values="M 110 120 Q 80 180 70 280 Q 65 320 75 350;
+                         M 110 120 Q 75 185 68 285 Q 62 325 72 355;
+                         M 110 120 Q 80 180 70 280 Q 65 320 75 350"
+                 dur="3s" repeatCount="indefinite"/>
+      </path>
+      <!-- 左虾须细分支 -->
+      <path d="M 110 120 Q 60 170 50 250" 
+            stroke="#FF6B6B" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.7">
+        <animate attributeName="d"
+                 values="M 110 120 Q 60 170 50 250;
+                         M 110 120 Q 55 175 45 255;
+                         M 110 120 Q 60 170 50 250"
+                 dur="2.5s" repeatCount="indefinite"/>
+      </path>
+      
+      <!-- 右虾须 -->
+      <path d="M 190 120 Q 220 180 230 280 Q 235 320 225 350" 
+            stroke="#FF5252" stroke-width="4" fill="none" stroke-linecap="round">
+        <animate attributeName="d"
+                 values="M 190 120 Q 220 180 230 280 Q 235 320 225 350;
+                         M 190 120 Q 225 185 232 285 Q 238 325 228 355;
+                         M 190 120 Q 220 180 230 280 Q 235 320 225 350"
+                 dur="3s" repeatCount="indefinite"/>
+      </path>
+      <!-- 右虾须细分支 -->
+      <path d="M 190 120 Q 240 170 250 250" 
+            stroke="#FF6B6B" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.7">
+        <animate attributeName="d"
+                 values="M 190 120 Q 240 170 250 250;
+                         M 190 120 Q 245 175 255 255;
+                         M 190 120 Q 240 170 250 250"
+                 dur="2.5s" repeatCount="indefinite"/>
+      </path>
     </g>
     
-    <!-- 右螯臂 -->
-    <path d="M 140 90 Q 165 70 175 50" stroke="url(#clawGrad)" stroke-width="10" fill="none" stroke-linecap="round"/>
-    <path d="M 140 90 Q 160 75 168 58" stroke="#FF8A8A" stroke-width="4" fill="none" stroke-linecap="round"/>
-    
-    <!-- 右螯钳 -->
-    <g transform="translate(175, 50) rotate(20)">
-      <ellipse cx="0" cy="0" rx="18" ry="22" fill="url(#clawGrad)"/>
-      <path d="M -12 -15 L -18 -25 L -8 -18 Z" fill="#CC4444"/>
-      <path d="M 12 -15 L 18 -25 L 8 -18 Z" fill="#CC4444"/>
-      <ellipse cx="0" cy="-5" rx="10" ry="12" fill="#FFE4E1"/>
-      <path d="M -8 -8 Q 0 0 8 -8" stroke="#CC4444" stroke-width="2" fill="none"/>
+    <!-- ========== 尾巴（多关节可摆动） ========== -->
+    <g id="tail" transform="translate(150, 280)">
+      <!-- 尾节1（最大） -->
+      <g class="tail-segment" id="tail1">
+        <ellipse cx="0" cy="0" rx="55" ry="40" fill="url(#tailGrad)"/>
+        <ellipse cx="0" cy="0" rx="45" ry="32" fill="none" stroke="#B71C1C" stroke-width="2" opacity="0.3"/>
+        <!-- 尾刺 -->
+        <path d="M -15 -35 L 0 -60 L 15 -35 Z" fill="#B71C1C"/>
+        <animateTransform attributeName="transform" type="rotate"
+                          values="-5 0 40; 5 0 40; -5 0 40"
+                          dur="2s" repeatCount="indefinite"/>
+      </g>
+      
+      <!-- 尾节2 -->
+      <g class="tail-segment" id="tail2" transform="translate(0, -50)">
+        <ellipse cx="0" cy="0" rx="50" ry="35" fill="url(#tailGrad)"/>
+        <ellipse cx="0" cy="0" rx="40" ry="28" fill="none" stroke="#B71C1C" stroke-width="2" opacity="0.3"/>
+        <animateTransform attributeName="transform" type="rotate"
+                          values="-3 0 35; 3 0 35; -3 0 35"
+                          dur="1.8s" repeatCount="indefinite"/>
+      </g>
+      
+      <!-- 尾节3 -->
+      <g class="tail-segment" id="tail3" transform="translate(0, -90)">
+        <ellipse cx="0" cy="0" rx="45" ry="30" fill="url(#tailGrad)"/>
+        <ellipse cx="0" cy="0" rx="35" ry="24" fill="none" stroke="#B71C1C" stroke-width="2" opacity="0.3"/>
+        <animateTransform attributeName="transform" type="rotate"
+                          values="-4 0 30; 4 0 30; -4 0 30"
+                          dur="1.6s" repeatCount="indefinite"/>
+      </g>
+      
+      <!-- 尾节4（连接身体） -->
+      <g class="tail-segment" id="tail4" transform="translate(0, -125)">
+        <ellipse cx="0" cy="0" rx="40" ry="25" fill="url(#tailGrad)"/>
+        <ellipse cx="0" cy="0" rx="30" ry="20" fill="none" stroke="#B71C1C" stroke-width="2" opacity="0.3"/>
+        <animateTransform attributeName="transform" type="rotate"
+                          values="-2 0 25; 2 0 25; -2 0 25"
+                          dur="1.5s" repeatCount="indefinite"/>
+      </g>
     </g>
-  </g>
-  
-  <!-- 头部细节 -->
-  <g filter="url(#shadow)">
-    <!-- 头胸甲 -->
-    <path d="M 52 65 Q 100 45 148 65 Q 140 100 100 105 Q 60 100 52 65" fill="url(#headHighlight)"/>
     
-    <!-- 头中间线 -->
-    <path d="M 100 50 L 100 100" stroke="#CC4444" stroke-width="1" opacity="0.3"/>
-  </g>
-  
-  <!-- 眼睛 (更精致) -->
-  <g>
-    <!-- 左眼柄 -->
-    <line x1="75" y1="70" x2="70" y2="55" stroke="#FF6B6B" stroke-width="6" stroke-linecap="round"/>
-    <!-- 右眼柄 -->
-    <line x1="125" y1="70" x2="130" y2="55" stroke="#FF6B6B" stroke-width="6" stroke-linecap="round"/>
+    <!-- ========== 后腿 ========== -->
+    <g id="backLegs">
+      <ellipse cx="100" cy="240" rx="10" ry="25" fill="#C62828" transform="rotate(-30 100 240)"/>
+      <ellipse cx="200" cy="240" rx="10" ry="25" fill="#C62828" transform="rotate(30 200 240)"/>
+      <ellipse cx="105" cy="270" rx="8" ry="20" fill="#C62828" transform="rotate(-20 105 270)"/>
+      <ellipse cx="195" cy="270" rx="8" ry="20" fill="#C62828" transform="rotate(20 195 270)"/>
+    </g>
     
-    <!-- 左眼 -->
-    <circle cx="68" cy="52" r="14" fill="white" stroke="#FF6B6B" stroke-width="2"/>
-    <circle cx="68" cy="52" r="10" fill="url(#eyeGrad)"/>
-    <circle cx="71" cy="49" r="4" fill="white" opacity="0.8"/>
-    <circle cx="66" cy="55" r="2" fill="white" opacity="0.4"/>
+    <!-- ========== 身体（椭圆Q版） ========== -->
+    <g id="body">
+      <ellipse cx="150" cy="200" rx="70" ry="65" fill="url(#bodyGrad)"/>
+      <!-- 身体纹理 -->
+      <path d="M 100 210 Q 150 225 200 210" stroke="#C62828" stroke-width="3" fill="none" opacity="0.4"/>
+      <path d="M 110 195 Q 150 208 190 195" stroke="#C62828" stroke-width="3" fill="none" opacity="0.4"/>
+      <path d="M 120 180 Q 150 190 180 180" stroke="#C62828" stroke-width="3" fill="none" opacity="0.4"/>
+    </g>
     
-    <!-- 右眼 -->
-    <circle cx="132" cy="52" r="14" fill="white" stroke="#FF6B6B" stroke-width="2"/>
-    <circle cx="132" cy="52" r="10" fill="url(#eyeGrad)"/>
-    <circle cx="135" cy="49" r="4" fill="white" opacity="0.8"/>
-    <circle cx="130" cy="55" r="2" fill="white" opacity="0.4"/>
-  </g>
-  
-  <!-- 嘴巴 -->
-  <g>
-    <path d="M 88 115 Q 100 125 112 115" stroke="#AA3333" stroke-width="3" fill="none" stroke-linecap="round"/>
-    <path d="M 85 118 Q 100 128 115 118" stroke="#CC5555" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.5"/>
-  </g>
-  
-  <!-- 腮红 -->
-  <g opacity="0.6">
-    <ellipse cx="60" cy="100" rx="12" ry="8" fill="#FFB6C1"/>
-    <ellipse cx="140" cy="100" rx="12" ry="8" fill="#FFB6C1"/>
-  </g>
-  
-  <!-- 前腿 -->
-  <g fill="#CC4444">
-    <ellipse cx="70" cy="110" rx="5" ry="14" transform="rotate(-25 70 110)"/>
-    <ellipse cx="130" cy="110" rx="5" ry="14" transform="rotate(25 130 110)"/>
+    <!-- ========== 螯（大钳子） ========== -->
+    <g id="claws">
+      <!-- 左螯 -->
+      <g id="leftClaw" transform="translate(80, 160)">
+        <!-- 螯臂 -->
+        <path d="M 0 0 Q -30 20 -50 10" stroke="url(#clawGrad)" stroke-width="15" fill="none" stroke-linecap="round">
+          <animate attributeName="d"
+                   values="M 0 0 Q -30 20 -50 10; M 0 0 Q -35 25 -55 15; M 0 0 Q -30 20 -50 10"
+                   dur="2s" repeatCount="indefinite"/>
+        </path>
+        
+        <!-- 螯钳 -->
+        <g transform="translate(-55, 10) rotate(-20)">
+          <!-- 上钳 -->
+          <ellipse cx="-15" cy="-20" rx="25" ry="35" fill="url(#clawGrad)" transform="rotate(-30)"/>
+          <!-- 下钳 -->
+          <ellipse cx="-15" cy="20" rx="25" ry="35" fill="url(#clawGrad)" transform="rotate(30)"/>
+          <!-- 螯心 -->
+          <circle cx="0" cy="0" r="15" fill="#FFE4E1"/>
+          <!-- 钳尖 -->
+          <path d="M -35 -35 L -45 -50 L -30 -40 Z" fill="#B71C1C"/>
+          <path d="M -35 35 L -45 50 L -30 40 Z" fill="#B71C1C"/>
+          
+          <animateTransform attributeName="transform" type="rotate"
+                            values="-20; -25; -20" dur="1.5s" repeatCount="indefinite"/>
+        </g>
+      </g>
+      
+      <!-- 右螯 -->
+      <g id="rightClaw" transform="translate(220, 160)">
+        <!-- 螯臂 -->
+        <path d="M 0 0 Q 30 20 50 10" stroke="url(#clawGrad)" stroke-width="15" fill="none" stroke-linecap="round">
+          <animate attributeName="d"
+                   values="M 0 0 Q 30 20 50 10; M 0 0 Q 35 25 55 15; M 0 0 Q 30 20 50 10"
+                   dur="2s" repeatCount="indefinite"/>
+        </path>
+        
+        <!-- 螯钳 -->
+        <g transform="translate(55, 10) rotate(20)">
+          <!-- 上钳 -->
+          <ellipse cx="15" cy="-20" rx="25" ry="35" fill="url(#clawGrad)" transform="rotate(30)"/>
+          <!-- 下钳 -->
+          <ellipse cx="15" cy="20" rx="25" ry="35" fill="url(#clawGrad)" transform="rotate(-30)"/>
+          <!-- 螯心 -->
+          <circle cx="0" cy="0" r="15" fill="#FFE4E1"/>
+          <!-- 钳尖 -->
+          <path d="M 35 -35 L 45 -50 L 30 -40 Z" fill="#B71C1C"/>
+          <path d="M 35 35 L 45 50 L 30 40 Z" fill="#B71C1C"/>
+          
+          <animateTransform attributeName="transform" type="rotate"
+                            values="20; 25; 20" dur="1.5s" repeatCount="indefinite"/>
+        </g>
+      </g>
+    </g>
+    
+    <!-- ========== 前腿 ========== -->
+    <g id="frontLegs">
+      <ellipse cx="95" cy="220" rx="8" ry="22" fill="#C62828" transform="rotate(-35 95 220)"/>
+      <ellipse cx="205" cy="220" rx="8" ry="22" fill="#C62828" transform="rotate(35 205 220)"/>
+    </g>
+    
+    <!-- ========== 头部 ========== -->
+    <g id="head">
+      <!-- 头胸甲 -->
+      <path d="M 90 140 Q 150 110 210 140 Q 200 180 150 185 Q 100 180 90 140" 
+            fill="url(#headGrad)"/>
+      
+      <!-- 头部高光 -->
+      <ellipse cx="130" cy="135" rx="25" ry="15" fill="#FFB3B3" opacity="0.5"/>
+    </g>
+    
+    <!-- ========== 大眼睛（Q版特色） ========== -->
+    <g id="eyes">
+      <!-- 左眼柄 -->
+      <line x1="115" y1="145" x2="105" y2="110" stroke="#FF6B6B" stroke-width="8" stroke-linecap="round"/>
+      
+      <!-- 右眼柄 -->
+      <line x1="185" y1="145" x2="195" y2="110" stroke="#FF6B6B" stroke-width="8" stroke-linecap="round"/>
+      
+      <!-- 左眼球（大大大） -->
+      <g id="leftEye">
+        <circle cx="105" cy="95" r="28" fill="white" stroke="#FF6B6B" stroke-width="3"/>
+        <circle cx="105" cy="95" r="18" fill="url(#eyeGrad)"/>
+        <circle cx="110" cy="90" r="8" fill="white" opacity="0.9"/>
+        <circle cx="100" cy="100" r="4" fill="white" opacity="0.5"/>
+        
+        <!-- 眨眼动画 -->
+        <ellipse cx="105" cy="95" rx="28" ry="0" fill="#FF6B6B" opacity="0">
+          <animate attributeName="ry" values="0;0;28;0;0" dur="4s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="0;0;1;0;0" dur="4s" repeatCount="indefinite"/>
+        </ellipse>
+      </g>
+      
+      <!-- 右眼球（大大大） -->
+      <g id="rightEye">
+        <circle cx="195" cy="95" r="28" fill="white" stroke="#FF6B6B" stroke-width="3"/>
+        <circle cx="195" cy="95" r="18" fill="url(#eyeGrad)"/>
+        <circle cx="200" cy="90" r="8" fill="white" opacity="0.9"/>
+        <circle cx="190" cy="100" r="4" fill="white" opacity="0.5"/>
+        
+        <!-- 眨眼动画 -->
+        <ellipse cx="195" cy="95" rx="28" ry="0" fill="#FF6B6B" opacity="0">
+          <animate attributeName="ry" values="0;0;28;0;0" dur="4s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="0;0;1;0;0" dur="4s" repeatCount="indefinite"/>
+        </ellipse>
+      </g>
+    </g>
+    
+    <!-- ========== 嘴巴 ========== -->
+    <g id="mouth">
+      <path d="M 135 165 Q 150 175 165 165" stroke="#B71C1C" stroke-width="4" fill="none" stroke-linecap="round"/>
+      <!-- 微笑 -->
+      <path d="M 140 168 Q 150 178 160 168" stroke="#FF8A8A" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.6"/>
+    </g>
+    
+    <!-- ========== 腮红（可爱） ========== -->
+    <g id="cheeks" opacity="0.6">
+      <ellipse cx="75" cy="160" rx="15" ry="10" fill="#FFB6C1"/>
+      <ellipse cx="225" cy="160" rx="15" ry="10" fill="#FFB6C1"/>
+    </g>
+    
+    <!-- ========== 整体轻微摇摆 ========== -->
+    <animateTransform attributeName="transform" type="rotate"
+                      values="-1 150 200; 1 150 200; -1 150 200"
+                      dur="3s" repeatCount="indefinite" additive="sum"/>
   </g>
 </svg>
