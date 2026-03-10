@@ -1,4 +1,4 @@
-<!-- 🦞 Q版小龙虾SVG - 修复钳子和虾须 -->
+<!-- 🦞 Q版小龙虾SVG - 修复虾须、钳子、腹足 -->
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 400" id="qlobster">
   <defs>
     <!-- 红色渐变 -->
@@ -29,6 +29,13 @@
       <stop offset="100%" style="stop-color:#B71C1C"/>
     </linearGradient>
     
+    <!-- 足渐变 -->
+    <linearGradient id="legGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#C62828"/>
+      <stop offset="50%" style="stop-color:#E53935"/>
+      <stop offset="100%" style="stop-color:#C62828"/>
+    </linearGradient>
+    
     <radialGradient id="eyeGrad" cx="35%" cy="35%" r="60%">
       <stop offset="0%" style="stop-color:#333"/>
       <stop offset="80%" style="stop-color:#000"/>
@@ -42,46 +49,26 @@
   
   <g id="lobsterBody" filter="url(#dropShadow)">
     
-    <!-- ========== 虾须（先向上扬起再垂下） ========== -->
+    <!-- ========== 虾须（只有两条，左右各一） ========== -->
     <g id="whiskers">
-      <!-- 左主虾须：先向上扬起，再优雅垂下 -->
-      <path d="M 110 120 C 90 80 60 60 40 80 C 20 100 30 150 50 200 C 65 250 60 300 55 350" 
-            stroke="#FF5252" stroke-width="4" fill="none" stroke-linecap="round">
+      <!-- 左虾须：先向上扬起，再优雅垂下 -->
+      <path d="M 110 120 C 85 75 55 55 35 75 C 15 95 25 145 45 195 C 60 245 55 295 50 345" 
+            stroke="#FF5252" stroke-width="5" fill="none" stroke-linecap="round">
         <animate attributeName="d" 
-                 values="M 110 120 C 90 80 60 60 40 80 C 20 100 30 150 50 200 C 65 250 60 300 55 350;
-                         M 110 120 C 88 78 58 58 38 78 C 18 98 28 148 48 198 C 63 248 58 298 53 348;
-                         M 110 120 C 90 80 60 60 40 80 C 20 100 30 150 50 200 C 65 250 60 300 55 350"
+                 values="M 110 120 C 85 75 55 55 35 75 C 15 95 25 145 45 195 C 60 245 55 295 50 345;
+                         M 110 120 C 83 73 53 53 33 73 C 13 93 23 143 43 193 C 58 243 53 293 48 343;
+                         M 110 120 C 85 75 55 55 35 75 C 15 95 25 145 45 195 C 60 245 55 295 50 345"
                  dur="3s" repeatCount="indefinite"/>
       </path>
       
-      <!-- 左副虾须 -->
-      <path d="M 115 125 C 95 90 70 75 55 95 C 40 115 45 160 55 200" 
-            stroke="#FF6B6B" stroke-width="2.5" fill="none" stroke-linecap="round" opacity="0.8">
+      <!-- 右虾须：先向上扬起，再优雅垂下 -->
+      <path d="M 190 120 C 215 75 245 55 265 75 C 285 95 275 145 255 195 C 240 245 245 295 250 345" 
+            stroke="#FF5252" stroke-width="5" fill="none" stroke-linecap="round">
         <animate attributeName="d"
-                 values="M 115 125 C 95 90 70 75 55 95 C 40 115 45 160 55 200;
-                         M 115 125 C 93 88 68 73 53 93 C 38 113 43 158 53 198;
-                         M 115 125 C 95 90 70 75 55 95 C 40 115 45 160 55 200"
-                 dur="2.5s" repeatCount="indefinite"/>
-      </path>
-      
-      <!-- 右主虾须：先向上扬起，再优雅垂下 -->
-      <path d="M 190 120 C 210 80 240 60 260 80 C 280 100 270 150 250 200 C 235 250 240 300 245 350" 
-            stroke="#FF5252" stroke-width="4" fill="none" stroke-linecap="round">
-        <animate attributeName="d"
-                 values="M 190 120 C 210 80 240 60 260 80 C 280 100 270 150 250 200 C 235 250 240 300 245 350;
-                         M 190 120 C 212 78 242 58 262 78 C 282 98 272 148 252 198 C 237 248 242 298 247 348;
-                         M 190 120 C 210 80 240 60 260 80 C 280 100 270 150 250 200 C 235 250 240 300 245 350"
+                 values="M 190 120 C 215 75 245 55 265 75 C 285 95 275 145 255 195 C 240 245 245 295 250 345;
+                         M 190 120 C 217 73 247 53 267 73 C 287 93 277 143 257 193 C 242 243 247 293 252 343;
+                         M 190 120 C 215 75 245 55 265 75 C 285 95 275 145 255 195 C 240 245 245 295 250 345"
                  dur="3s" repeatCount="indefinite"/>
-      </path>
-      
-      <!-- 右副虾须 -->
-      <path d="M 185 125 C 205 90 230 75 245 95 C 260 115 255 160 245 200" 
-            stroke="#FF6B6B" stroke-width="2.5" fill="none" stroke-linecap="round" opacity="0.8">
-        <animate attributeName="d"
-                 values="M 185 125 C 205 90 230 75 245 95 C 260 115 255 160 245 200;
-                         M 185 125 C 207 88 232 73 247 93 C 262 113 257 158 247 198;
-                         M 185 125 C 205 90 230 75 245 95 C 260 115 255 160 245 200"
-                 dur="2.5s" repeatCount="indefinite"/>
       </path>
     </g>
     
@@ -125,145 +112,177 @@
       </g>
     </g>
     
-    <!-- ========== 后腿 ========== -->
-    <g id="backLegs">
-      <ellipse cx="100" cy="240" rx="10" ry="25" fill="#C62828" transform="rotate(-30 100 240)"/>
-      <ellipse cx="200" cy="240" rx="10" ry="25" fill="#C62828" transform="rotate(30 200 240)"/>
-      <ellipse cx="105" cy="270" rx="8" ry="20" fill="#C62828" transform="rotate(-20 105 270)"/>
-      <ellipse cx="195" cy="270" rx="8" ry="20" fill="#C62828" transform="rotate(20 195 270)"/>
+    <!-- ========== 腹足（四对，左右对称） ========== -->
+    <g id="walkingLegs">
+      <!-- 第一对（最前） -->
+      <g id="leg1-left" transform="translate(90, 190)">
+        <ellipse cx="0" cy="0" rx="12" ry="28" fill="url(#legGrad)" transform="rotate(-50 0 0)"/>
+        <ellipse cx="-15" cy="20" rx="8" ry="15" fill="#B71C1C" transform="rotate(-70 -15 20)"/>
+      </g>
+      <g id="leg1-right" transform="translate(210, 190)">
+        <ellipse cx="0" cy="0" rx="12" ry="28" fill="url(#legGrad)" transform="rotate(50 0 0)"/>
+        <ellipse cx="15" cy="20" rx="8" ry="15" fill="#B71C1C" transform="rotate(70 15 20)"/>
+      </g>
+      
+      <!-- 第二对 -->
+      <g id="leg2-left" transform="translate(85, 215)">
+        <ellipse cx="0" cy="0" rx="11" ry="26" fill="url(#legGrad)" transform="rotate(-45 0 0)"/>
+        <ellipse cx="-18" cy="18" rx="7" ry="14" fill="#B71C1C" transform="rotate(-65 -18 18)"/>
+      </g>
+      <g id="leg2-right" transform="translate(215, 215)">
+        <ellipse cx="0" cy="0" rx="11" ry="26" fill="url(#legGrad)" transform="rotate(45 0 0)"/>
+        <ellipse cx="18" cy="18" rx="7" ry="14" fill="#B71C1C" transform="rotate(65 18 18)"/>
+      </g>
+      
+      <!-- 第三对 -->
+      <g id="leg3-left" transform="translate(82, 240)">
+        <ellipse cx="0" cy="0" rx="10" ry="24" fill="url(#legGrad)" transform="rotate(-40 0 0)"/>
+        <ellipse cx="-20" cy="16" rx="6" ry="13" fill="#B71C1C" transform="rotate(-60 -20 16)"/>
+      </g>
+      <g id="leg3-right" transform="translate(218, 240)">
+        <ellipse cx="0" cy="0" rx="10" ry="24" fill="url(#legGrad)" transform="rotate(40 0 0)"/>
+        <ellipse cx="20" cy="16" rx="6" ry="13" fill="#B71C1C" transform="rotate(60 20 16)"/>
+      </g>
+      
+      <!-- 第四对（最后） -->
+      <g id="leg4-left" transform="translate(88, 265)">
+        <ellipse cx="0" cy="0" rx="9" ry="22" fill="url(#legGrad)" transform="rotate(-35 0 0)"/>
+        <ellipse cx="-18" cy="14" rx="5" ry="12" fill="#B71C1C" transform="rotate(-55 -18 14)"/>
+      </g>
+      <g id="leg4-right" transform="translate(212, 265)">
+        <ellipse cx="0" cy="0" rx="9" ry="22" fill="url(#legGrad)" transform="rotate(35 0 0)"/>
+        <ellipse cx="18" cy="14" rx="5" ry="12" fill="#B71C1C" transform="rotate(55 18 14)"/>
+      </g>
     </g>
     
     <!-- ========== 身体 ========== -->
     <g id="body">
-      <ellipse cx="150" cy="200" rx="70" ry="65" fill="url(#bodyGrad)"/>
-      <path d="M 100 210 Q 150 225 200 210" stroke="#C62828" stroke-width="3" fill="none" opacity="0.4"/>
-      <path d="M 110 195 Q 150 208 190 195" stroke="#C62828" stroke-width="3" fill="none" opacity="0.4"/>
-      <path d="M 120 180 Q 150 190 180 180" stroke="#C62828" stroke-width="3" fill="none" opacity="0.4"/>
+      <ellipse cx="150" cy="210" rx="75" ry="70" fill="url(#bodyGrad)"/>
+      <!-- 身体纹理 -->
+      <path d="M 100 220 Q 150 235 200 220" stroke="#C62828" stroke-width="3" fill="none" opacity="0.4"/>
+      <path d="M 110 205 Q 150 218 190 205" stroke="#C62828" stroke-width="3" fill="none" opacity="0.4"/>
+      <path d="M 120 190 Q 150 200 180 190" stroke="#C62828" stroke-width="3" fill="none" opacity="0.4"/>
     </g>
     
-    <!-- ========== 螯（钳子形状 - 有明显上下钳） ========== -->
+    <!-- ========== 螯（圆润粗壮的钳子） ========== -->
     <g id="claws">
       <!-- 左螯 -->
-      <g id="leftClaw" transform="translate(75, 170)">
-        <!-- 螯臂 -->
-        <path d="M 0 0 Q -25 15 -45 5" stroke="url(#clawGrad)" stroke-width="12" fill="none" stroke-linecap="round">
+      <g id="leftClaw" transform="translate(70, 175)">
+        <!-- 螯臂（更粗） -->
+        <path d="M 0 0 Q -30 20 -55 10" stroke="url(#clawGrad)" stroke-width="18" fill="none" stroke-linecap="round">
           <animate attributeName="d"
-                   values="M 0 0 Q -25 15 -45 5; M 0 0 Q -28 18 -48 8; M 0 0 Q -25 15 -45 5"
+                   values="M 0 0 Q -30 20 -55 10; M 0 0 Q -33 23 -58 13; M 0 0 Q -30 20 -55 10"
                    dur="2s" repeatCount="indefinite"/>
         </path>
         
-        <!-- 螯钳主体（可开合的钳子） -->
-        <g transform="translate(-50, 5) rotate(-15)">
-          <!-- 下钳（固定部分） -->
-          <path d="M 0 10 Q -15 25 -25 45 Q -30 55 -20 50 Q -5 35 5 15 Z" 
-                fill="url(#clawGrad)" stroke="#B71C1C" stroke-width="1"/>
-          <!-- 下钳尖 -->
-          <path d="M -25 45 L -35 60 L -20 50 Z" fill="#B71C1C"/>
+        <!-- 螯钳主体（圆润粗壮） -->
+        <g transform="translate(-60, 10) rotate(-12)">
+          <!-- 下钳（固定部分，更圆润） -->
+          <path d="M -5 15 C -20 30 -35 50 -30 65 C -25 75 -10 70 5 55 C 15 45 10 25 5 15 Z" 
+                fill="url(#clawGrad)" stroke="#B71C1C" stroke-width="1.5"/>
+          <!-- 下钳尖（圆润） -->
+          <ellipse cx="-32" cy="65" rx="8" ry="12" fill="#B71C1C" transform="rotate(-20 -32 65)"/>
           
-          <!-- 上钳（可动部分） -->
+          <!-- 上钳（可动部分，更圆润） -->
           <g>
-            <path d="M 0 -5 Q -18 -20 -30 -40 Q -35 -50 -25 -45 Q -8 -30 5 -10 Z" 
-                  fill="url(#clawGrad)" stroke="#B71C1C" stroke-width="1"/>
-            <!-- 上钳尖 -->
-            <path d="M -30 -40 L -40 -55 L -25 -45 Z" fill="#B71C1C"/>
+            <path d="M -5 -10 C -22 -25 -40 -45 -35 -60 C -30 -70 -12 -65 5 -50 C 18 -38 12 -20 5 -10 Z" 
+                  fill="url(#clawGrad)" stroke="#B71C1C" stroke-width="1.5"/>
+            <!-- 上钳尖（圆润） -->
+            <ellipse cx="-37" cy="-60" rx="8" ry="12" fill="#B71C1C" transform="rotate(20 -37 -60)"/>
             
             <!-- 上钳开合动画 -->
             <animateTransform attributeName="transform" type="rotate"
-                              values="0 0 0; -15 0 0; 0 0 0"
+                              values="0 0 0; -12 0 0; 0 0 0"
                               dur="1.5s" repeatCount="indefinite"/>
           </g>
           
-          <!-- 螯心（关节处） -->
-          <circle cx="0" cy="5" r="12" fill="url(#clawInnerGrad)" stroke="#B71C1C" stroke-width="1"/>
-          <circle cx="-3" cy="3" r="5" fill="#FF8A8A" opacity="0.5"/>
+          <!-- 螯心（关节处，更大更圆） -->
+          <circle cx="0" cy="5" r="16" fill="url(#clawInnerGrad)" stroke="#B71C1C" stroke-width="1.5"/>
+          <circle cx="-4" cy="2" r="6" fill="#FF8A8A" opacity="0.5"/>
           
           <animateTransform attributeName="transform" type="rotate"
-                            values="-15; -18; -15" dur="1.5s" repeatCount="indefinite"/>
+                            values="-12; -15; -12" dur="1.5s" repeatCount="indefinite"/>
         </g>
       </g>
       
       <!-- 右螯 -->
-      <g id="rightClaw" transform="translate(225, 170)">
+      <g id="rightClaw" transform="translate(230, 175)">
         <!-- 螯臂 -->
-        <path d="M 0 0 Q 25 15 45 5" stroke="url(#clawGrad)" stroke-width="12" fill="none" stroke-linecap="round">
+        <path d="M 0 0 Q 30 20 55 10" stroke="url(#clawGrad)" stroke-width="18" fill="none" stroke-linecap="round">
           <animate attributeName="d"
-                   values="M 0 0 Q 25 15 45 5; M 0 0 Q 28 18 48 8; M 0 0 Q 25 15 45 5"
+                   values="M 0 0 Q 30 20 55 10; M 0 0 Q 33 23 58 13; M 0 0 Q 30 20 55 10"
                    dur="2s" repeatCount="indefinite"/>
         </path>
         
         <!-- 螯钳主体 -->
-        <g transform="translate(50, 5) rotate(15)">
+        <g transform="translate(60, 10) rotate(12)">
           <!-- 下钳 -->
-          <path d="M 0 10 Q 15 25 25 45 Q 30 55 20 50 Q 5 35 -5 15 Z" 
-                fill="url(#clawGrad)" stroke="#B71C1C" stroke-width="1"/>
-          <path d="M 25 45 L 35 60 L 20 50 Z" fill="#B71C1C"/>
+          <path d="M 5 15 C 20 30 35 50 30 65 C 25 75 10 70 -5 55 C -15 45 -10 25 -5 15 Z" 
+                fill="url(#clawGrad)" stroke="#B71C1C" stroke-width="1.5"/>
+          <!-- 下钳尖 -->
+          <ellipse cx="32" cy="65" rx="8" ry="12" fill="#B71C1C" transform="rotate(20 32 65)"/>
           
           <!-- 上钳 -->
           <g>
-            <path d="M 0 -5 Q 18 -20 30 -40 Q 35 -50 25 -45 Q 8 -30 -5 -10 Z" 
-                  fill="url(#clawGrad)" stroke="#B71C1C" stroke-width="1"/>
-            <path d="M 30 -40 L 40 -55 L 25 -45 Z" fill="#B71C1C"/>
+            <path d="M 5 -10 C 22 -25 40 -45 35 -60 C 30 -70 12 -65 -5 -50 C -18 -38 -12 -20 -5 -10 Z" 
+                  fill="url(#clawGrad)" stroke="#B71C1C" stroke-width="1.5"/>
+            <!-- 上钳尖 -->
+            <ellipse cx="37" cy="-60" rx="8" ry="12" fill="#B71C1C" transform="rotate(-20 37 -60)"/>
             
             <animateTransform attributeName="transform" type="rotate"
-                              values="0 0 0; 15 0 0; 0 0 0"
+                              values="0 0 0; 12 0 0; 0 0 0"
                               dur="1.5s" repeatCount="indefinite"/>
           </g>
           
           <!-- 螯心 -->
-          <circle cx="0" cy="5" r="12" fill="url(#clawInnerGrad)" stroke="#B71C1C" stroke-width="1"/>
-          <circle cx="3" cy="3" r="5" fill="#FF8A8A" opacity="0.5"/>
+          <circle cx="0" cy="5" r="16" fill="url(#clawInnerGrad)" stroke="#B71C1C" stroke-width="1.5"/>
+          <circle cx="4" cy="2" r="6" fill="#FF8A8A" opacity="0.5"/>
           
           <animateTransform attributeName="transform" type="rotate"
-                            values="15; 18; 15" dur="1.5s" repeatCount="indefinite"/>
+                            values="12; 15; 12" dur="1.5s" repeatCount="indefinite"/>
         </g>
       </g>
     </g>
     
-    <!-- ========== 前腿 ========== -->
-    <g id="frontLegs">
-      <ellipse cx="95" cy="220" rx="8" ry="22" fill="#C62828" transform="rotate(-35 95 220)"/>
-      <ellipse cx="205" cy="220" rx="8" ry="22" fill="#C62828" transform="rotate(35 205 220)"/>
-    </g>
-    
     <!-- ========== 头部 ========== -->
     <g id="head">
-      <path d="M 90 140 Q 150 110 210 140 Q 200 180 150 185 Q 100 180 90 140" 
+      <path d="M 85 145 Q 150 115 215 145 Q 205 185 150 190 Q 95 185 85 145" 
             fill="url(#headGrad)"/>
-      <ellipse cx="130" cy="135" rx="25" ry="15" fill="#FFB3B3" opacity="0.5"/>
+      <ellipse cx="125" cy="140" rx="28" ry="18" fill="#FFB3B3" opacity="0.5"/>
     </g>
     
     <!-- ========== 大眼睛 ========== -->
     <g id="eyes">
       <!-- 左眼柄 -->
-      <line x1="115" y1="145" x2="105" y2="110" stroke="#FF6B6B" stroke-width="8" stroke-linecap="round"/>
+      <line x1="110" y1="150" x2="100" y2="115" stroke="#FF6B6B" stroke-width="10" stroke-linecap="round"/>
       
       <!-- 右眼柄 -->
-      <line x1="185" y1="145" x2="195" y2="110" stroke="#FF6B6B" stroke-width="8" stroke-linecap="round"/>
+      <line x1="190" y1="150" x2="200" y2="115" stroke="#FF6B6B" stroke-width="10" stroke-linecap="round"/>
       
       <!-- 左眼球 -->
       <g id="leftEye">
-        <circle cx="105" cy="95" r="28" fill="white" stroke="#FF6B6B" stroke-width="3"/>
-        <circle cx="105" cy="95" r="18" fill="url(#eyeGrad)"/>
-        <circle cx="110" cy="90" r="8" fill="white" opacity="0.9"/>
-        <circle cx="100" cy="100" r="4" fill="white" opacity="0.5"/>
+        <circle cx="100" cy="100" r="30" fill="white" stroke="#FF6B6B" stroke-width="3"/>
+        <circle cx="100" cy="100" r="20" fill="url(#eyeGrad)"/>
+        <circle cx="106" cy="94" r="9" fill="white" opacity="0.9"/>
+        <circle cx="94" cy="106" r="5" fill="white" opacity="0.5"/>
         
         <!-- 眨眼 -->
-        <ellipse cx="105" cy="95" rx="28" ry="0" fill="#FF6B6B" opacity="0">
-          <animate attributeName="ry" values="0;0;28;0;0" dur="4s" repeatCount="indefinite"/>
+        <ellipse cx="100" cy="100" rx="30" ry="0" fill="#FF6B6B" opacity="0">
+          <animate attributeName="ry" values="0;0;30;0;0" dur="4s" repeatCount="indefinite"/>
           <animate attributeName="opacity" values="0;0;1;0;0" dur="4s" repeatCount="indefinite"/>
         </ellipse>
       </g>
       
       <!-- 右眼球 -->
       <g id="rightEye">
-        <circle cx="195" cy="95" r="28" fill="white" stroke="#FF6B6B" stroke-width="3"/>
-        <circle cx="195" cy="95" r="18" fill="url(#eyeGrad)"/>
-        <circle cx="200" cy="90" r="8" fill="white" opacity="0.9"/>
-        <circle cx="190" cy="100" r="4" fill="white" opacity="0.5"/>
+        <circle cx="200" cy="100" r="30" fill="white" stroke="#FF6B6B" stroke-width="3"/>
+        <circle cx="200" cy="100" r="20" fill="url(#eyeGrad)"/>
+        <circle cx="206" cy="94" r="9" fill="white" opacity="0.9"/>
+        <circle cx="194" cy="106" r="5" fill="white" opacity="0.5"/>
         
         <!-- 眨眼 -->
-        <ellipse cx="195" cy="95" rx="28" ry="0" fill="#FF6B6B" opacity="0">
-          <animate attributeName="ry" values="0;0;28;0;0" dur="4s" repeatCount="indefinite"/>
+        <ellipse cx="200" cy="100" rx="30" ry="0" fill="#FF6B6B" opacity="0">
+          <animate attributeName="ry" values="0;0;30;0;0" dur="4s" repeatCount="indefinite"/>
           <animate attributeName="opacity" values="0;0;1;0;0" dur="4s" repeatCount="indefinite"/>
         </ellipse>
       </g>
@@ -271,19 +290,19 @@
     
     <!-- ========== 嘴巴 ========== -->
     <g id="mouth">
-      <path d="M 135 165 Q 150 175 165 165" stroke="#B71C1C" stroke-width="4" fill="none" stroke-linecap="round"/>
-      <path d="M 140 168 Q 150 178 160 168" stroke="#FF8A8A" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.6"/>
+      <path d="M 135 170 Q 150 180 165 170" stroke="#B71C1C" stroke-width="4" fill="none" stroke-linecap="round"/>
+      <path d="M 140 173 Q 150 183 160 173" stroke="#FF8A8A" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.6"/>
     </g>
     
     <!-- ========== 腮红 ========== -->
     <g id="cheeks" opacity="0.6">
-      <ellipse cx="75" cy="160" rx="15" ry="10" fill="#FFB6C1"/>
-      <ellipse cx="225" cy="160" rx="15" ry="10" fill="#FFB6C1"/>
+      <ellipse cx="70" cy="165" rx="18" ry="12" fill="#FFB6C1"/>
+      <ellipse cx="230" cy="165" rx="18" ry="12" fill="#FFB6C1"/>
     </g>
     
     <!-- 整体摇摆 -->
     <animateTransform attributeName="transform" type="rotate"
-                      values="-1 150 200; 1 150 200; -1 150 200"
+                      values="-1 150 210; 1 150 210; -1 150 210"
                       dur="3s" repeatCount="indefinite" additive="sum"/>
   </g>
 </svg>
