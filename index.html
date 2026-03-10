@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🦞 Claw Home - 小龙虾之家</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="game-container">
+        <!-- 顶部状态栏 -->
+        <header class="top-bar">
+            <div class="logo">
+                <span class="lobster-icon">🦞</span>
+                <span class="title">Claw Home</span>
+            </div>
+            <div class="system-status">
+                <span class="status-indicator online"></span>
+                <span class="status-text">在线</span>
+            </div>
+        </header>
+
+        <!-- 主游戏区域 -->
+        <main class="game-area">
+            <!-- 背景场景 -->
+            <div class="scene">
+                <div class="water-bg"></div>
+                <div class="bubbles">
+                    <div class="bubble"></div>
+                    <div class="bubble"></div>
+                    <div class="bubble"></div>
+                    <div class="bubble"></div>
+                    <div class="bubble"></div>
+                </div>
+                <div class="seaweed">
+                    <div class="weed"></div>
+                    <div class="weed"></div>
+                    <div class="weed"></div>
+                </div>
+            </div>
+
+            <!-- 小龙虾容器 -->
+            <div class="lobsters-container" id="lobstersContainer">
+                <!-- 主小龙虾 -->
+                <div class="lobster main-lobster" id="mainLobster" data-status="working">
+                    <div class="lobster-body">
+                        <div class="crown">👑</div>
+                        <div class="face">
+                            <div class="eyes">
+                                <div class="eye left">
+                                    <div class="pupil"></div>
+                                </div>
+                                <div class="eye right">
+                                    <div class="pupil"></div>
+                                </div>
+                            </div>
+                            <div class="mouth"></div>
+                            <div class="cheeks">
+                                <div class="cheek left"></div>
+                                <div class="cheek right"></div>
+                            </div>
+                        </div>
+                        <div class="claws">
+                            <div class="claw left">
+                                <div class="claw-arm"></div>
+                                <div class="claw-hand">🦞</div>
+                            </div>
+                            <div class="claw right">
+                                <div class="claw-arm"></div>
+                                <div class="claw-hand">🦞</div>
+                            </div>
+                        </div>
+                        <div class="tail">
+                            <div class="tail-segment"></div>
+                            <div class="tail-segment"></div>
+                            <div class="tail-segment"></div>
+                        </div>
+                        <div class="legs">
+                            <div class="leg"></div>
+                            <div class="leg"></div>
+                            <div class="leg"></div>
+                            <div class="leg"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- 状态标签 -->
+                    <div class="status-tag" id="mainStatusTag">
+                        <span class="status-icon">🔨</span>
+                        <span class="status-text">干活中</span>
+                    </div>
+
+                    <!-- 气泡对话框 -->
+                    <div class="speech-bubble" id="speechBubble">
+                        <p>正在帮你清理Mac磁盘~ 💪</p>
+                    </div>
+                </div>
+
+                <!-- 子agent龙虾将通过JS动态添加 -->
+            </div>
+
+            <!-- 底部控制面板 -->
+            <div class="control-panel">
+                <div class="stats-card">
+                    <h3>📊 主龙虾状态</h3>
+                    <div class="stat-item">
+                        <span class="stat-label">名称:</span>
+                        <span class="stat-value">小龙虾 🦞</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">当前状态:</span>
+                        <span class="stat-value" id="mainStatus">干活 💪</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">能量:</span>
+                        <div class="energy-bar">
+                            <div class="energy-fill" id="energyFill" style="width: 85%"></div>
+                        </div>
+                        <span class="energy-text" id="energyText">85%</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">心情:</span>
+                        <span class="stat-value" id="mood">😊 开心</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">技能数:</span>
+                        <span class="stat-value">33个 ✨</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">运行时间:</span>
+                        <span class="stat-value" id="uptime">2小时15分</span>
+                    </div>
+                </div>
+
+                <div class="actions-card">
+                    <h3>🎮 互动</h3>
+                    <div class="action-buttons">
+                        <button class="action-btn feed" onclick="interact('feed')">
+                            <span class="btn-icon">🍤</span>
+                            <span class="btn-text">喂食</span>
+                        </button>
+                        <button class="action-btn play" onclick="interact('play')">
+                            <span class="btn-icon">🎾</span>
+                            <span class="btn-text">玩耍</span>
+                        </button>
+                        <button class="action-btn pet" onclick="interact('pet')">
+                            <span class="btn-icon">👋</span>
+                            <span class="btn-text">抚摸</span>
+                        </button>
+                        <button class="action-btn check" onclick="interact('check')">
+                            <span class="btn-icon">🔍</span>
+                            <span class="btn-text">查看</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="sub-agents-card">
+                    <h3>👥 子Agent龙虾 <span class="count" id="subAgentCount">(0)</span></h3>
+                    <div class="sub-agents-list" id="subAgentsList">
+                        <p class="empty-text">暂无子Agent运行中...</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- 右侧任务面板 -->
+        <aside class="task-panel">
+            <h3>📋 最近任务</h3>
+            <div class="task-list" id="taskList">
+                <div class="task-item completed">
+                    <span class="task-icon">✅</span>
+                    <span class="task-text">Mac磁盘清理</span>
+                    <span class="task-time">14:00</span>
+                </div>
+                <div class="task-item completed">
+                    <span class="task-icon">✅</span>
+                    <span class="task-text">删除临时文件 2.8GB</span>
+                    <span class="task-time">14:30</span>
+                </div>
+                <div class="task-item completed">
+                    <span class="task-icon">✅</span>
+                    <span class="task-text">清理应用缓存 5.7GB</span>
+                    <span class="task-time">15:00</span>
+                </div>
+                <div class="task-item active">
+                    <span class="task-icon">🔄</span>
+                    <span class="task-text">等待新任务...</span>
+                    <span class="task-time">now</span>
+                </div>
+            </div>
+
+            <h3>📈 今日统计</h3>
+            <div class="today-stats">
+                <div class="mini-stat">
+                    <span class="mini-label">释放空间</span>
+                    <span class="mini-value">10.8GB</span>
+                </div>
+                <div class="mini-stat">
+                    <span class="mini-label">完成任务</span>
+                    <span class="mini-value">12个</span>
+                </div>
+                <div class="mini-stat">
+                    <span class="mini-label">对话轮次</span>
+                    <span class="mini-value">48轮</span>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <!-- 底部信息栏 -->
+    <footer class="footer">
+        <div class="footer-content">
+            <span>🦞 Claw Home v1.0</span>
+            <span class="separator">|</span>
+            <span>小龙虾正在为你服务</span>
+            <span class="separator">|</span>
+            <span id="connectionStatus" class="connected">🟢 已连接</span>
+        </div>
+    </footer>
+
+    <script src="js/app.js"></script>
+</body>
+</html>

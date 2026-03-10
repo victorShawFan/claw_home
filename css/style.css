@@ -1,0 +1,859 @@
+/* 🦞 Claw Home - 小龙虾之家样式 */
+
+/* 基础重置 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary-color: #FF6B6B;
+    --secondary-color: #4ECDC4;
+    --accent-color: #FFE66D;
+    --bg-color: #E8F4F8;
+    --card-bg: rgba(255, 255, 255, 0.9);
+    --text-dark: #2C3E50;
+    --text-light: #7F8C8D;
+    --shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    --shadow-hover: 0 8px 25px rgba(0, 0, 0, 0.15);
+    --border-radius: 20px;
+    --transition: all 0.3s ease;
+}
+
+body {
+    font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* 🎮 游戏容器 */
+.game-container {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    grid-template-columns: 1fr 300px;
+    grid-template-areas: 
+        "header header"
+        "main sidebar";
+    min-height: calc(100vh - 50px);
+    gap: 20px;
+    padding: 20px;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* 🎯 顶部状态栏 */
+.top-bar {
+    grid-area: header;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--card-bg);
+    padding: 15px 25px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(10px);
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.lobster-icon {
+    font-size: 2.5em;
+    animation: float 2s ease-in-out infinite;
+}
+
+.title {
+    font-size: 1.8em;
+    font-weight: bold;
+    background: linear-gradient(45deg, #FF6B6B, #4ECDC4);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.system-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.status-indicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+}
+
+.status-indicator.online {
+    background: #2ECC71;
+    box-shadow: 0 0 10px #2ECC71;
+}
+
+.status-text {
+    color: var(--text-dark);
+    font-weight: 500;
+}
+
+/* 🎨 主游戏区域 */
+.game-area {
+    grid-area: main;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* 🌊 场景 */
+.scene {
+    position: relative;
+    height: 400px;
+    background: linear-gradient(180deg, #87CEEB 0%, #4682B4 50%, #191970 100%);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+}
+
+.water-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        radial-gradient(ellipse at 20% 80%, rgba(255,255,255,0.1) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 20%, rgba(255,255,255,0.1) 0%, transparent 50%);
+    animation: water-flow 8s linear infinite;
+}
+
+/* 🫧 气泡 */
+.bubbles {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    pointer-events: none;
+}
+
+.bubble {
+    position: absolute;
+    bottom: -50px;
+    width: 20px;
+    height: 20px;
+    background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.8), rgba(255,255,255,0.2));
+    border-radius: 50%;
+    animation: rise 4s ease-in infinite;
+}
+
+.bubble:nth-child(1) { left: 10%; width: 15px; height: 15px; animation-delay: 0s; }
+.bubble:nth-child(2) { left: 30%; width: 25px; height: 25px; animation-delay: 0.5s; }
+.bubble:nth-child(3) { left: 50%; width: 20px; height: 20px; animation-delay: 1s; }
+.bubble:nth-child(4) { left: 70%; width: 30px; height: 30px; animation-delay: 1.5s; }
+.bubble:nth-child(5) { left: 90%; width: 18px; height: 18px; animation-delay: 2s; }
+
+/* 🌿 海草 */
+.seaweed {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 150px;
+}
+
+.weed {
+    position: absolute;
+    bottom: 0;
+    width: 30px;
+    height: 100px;
+    background: linear-gradient(180deg, #228B22, #006400);
+    border-radius: 50% 50% 0 0;
+    animation: sway 3s ease-in-out infinite;
+    opacity: 0.7;
+}
+
+.weed:nth-child(1) { left: 5%; height: 120px; animation-delay: 0s; }
+.weed:nth-child(2) { left: 15%; height: 80px; animation-delay: 0.5s; }
+.weed:nth-child(3) { right: 10%; height: 100px; animation-delay: 1s; }
+
+/* 🦞 小龙虾容器 */
+.lobsters-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    gap: 100px;
+    align-items: flex-end;
+}
+
+/* 🦞 小龙虾主体 */
+.lobster {
+    position: relative;
+    width: 180px;
+    height: 200px;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.lobster:hover {
+    transform: scale(1.05);
+}
+
+.lobster-body {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+/* 👑 皇冠（主龙虾专属） */
+.crown {
+    position: absolute;
+    top: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 2.5em;
+    animation: sparkle 1.5s ease-in-out infinite;
+}
+
+/* 😊 脸 */
+.face {
+    position: absolute;
+    top: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 120px;
+    height: 100px;
+    background: linear-gradient(180deg, #FF6B6B, #EE5A5A);
+    border-radius: 50% 50% 45% 45%;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+/* 👀 眼睛 */
+.eyes {
+    position: absolute;
+    top: 25px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 30px;
+}
+
+.eye {
+    width: 35px;
+    height: 40px;
+    background: white;
+    border-radius: 50%;
+    position: relative;
+    box-shadow: inset 0 2px 5px rgba(0,0,0,0.1);
+    animation: blink 4s infinite;
+}
+
+.pupil {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 18px;
+    height: 22px;
+    background: linear-gradient(180deg, #333, #000);
+    border-radius: 50%;
+    animation: look-around 5s infinite;
+}
+
+/* 👄 嘴巴 */
+.mouth {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 20px;
+    background: #FF8A8A;
+    border-radius: 0 0 50% 50%;
+    border: 3px solid #CC5555;
+}
+
+/* 😊 腮红 */
+.cheeks {
+    position: absolute;
+    top: 55px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 60px;
+}
+
+.cheek {
+    width: 20px;
+    height: 15px;
+    background: rgba(255, 150, 150, 0.6);
+    border-radius: 50%;
+}
+
+/* 🦞 螯 */
+.claws {
+    position: absolute;
+    top: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 200px;
+}
+
+.claw {
+    position: absolute;
+    top: 0;
+    display: flex;
+    align-items: center;
+}
+
+.claw.left { left: 0; transform: rotate(-20deg); }
+.claw.right { right: 0; transform: rotate(20deg) scaleX(-1); }
+
+.claw-arm {
+    width: 40px;
+    height: 8px;
+    background: #FF6B6B;
+    border-radius: 4px;
+}
+
+.claw-hand {
+    font-size: 2em;
+    animation: claw-wave 2s ease-in-out infinite;
+}
+
+/* 🦐 尾巴 */
+.tail {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: -5px;
+}
+
+.tail-segment {
+    width: 80px;
+    height: 40px;
+    background: linear-gradient(180deg, #FF6B6B, #EE5A5A);
+    border-radius: 50%;
+    margin-top: -15px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+}
+
+.tail-segment:first-child {
+    margin-top: 0;
+    width: 100px;
+}
+
+/* 🦵 腿 */
+.legs {
+    position: absolute;
+    bottom: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 20px;
+}
+
+.leg {
+    width: 6px;
+    height: 30px;
+    background: #FF6B6B;
+    border-radius: 3px;
+}
+
+/* 🏷️ 状态标签 */
+.status-tag {
+    position: absolute;
+    top: -50px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--accent-color);
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-size: 0.9em;
+    font-weight: bold;
+    color: var(--text-dark);
+    box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+    animation: bounce 1s ease-in-out infinite;
+    white-space: nowrap;
+}
+
+.status-tag .status-icon {
+    margin-right: 5px;
+}
+
+/* 💬 气泡对话框 */
+.speech-bubble {
+    position: absolute;
+    top: -120px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: white;
+    padding: 15px 20px;
+    border-radius: 20px;
+    box-shadow: var(--shadow);
+    max-width: 250px;
+    font-size: 0.95em;
+    color: var(--text-dark);
+    opacity: 0;
+    animation: fade-in-out 4s ease-in-out;
+}
+
+.speech-bubble::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 10px 10px 0;
+    border-style: solid;
+    border-color: white transparent transparent;
+}
+
+.speech-bubble p {
+    margin: 0;
+}
+
+/* 🎛️ 控制面板 */
+.control-panel {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px;
+}
+
+/* 📊 卡片样式 */
+.stats-card, .actions-card, .sub-agents-card {
+    background: var(--card-bg);
+    border-radius: var(--border-radius);
+    padding: 20px;
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(10px);
+}
+
+.stats-card h3, .actions-card h3, .sub-agents-card h3 {
+    margin-bottom: 15px;
+    color: var(--text-dark);
+    font-size: 1.1em;
+}
+
+/* 📈 统计项 */
+.stat-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+    font-size: 0.9em;
+}
+
+.stat-label {
+    color: var(--text-light);
+    width: 80px;
+    flex-shrink: 0;
+}
+
+.stat-value {
+    color: var(--text-dark);
+    font-weight: 500;
+}
+
+/* ⚡ 能量条 */
+.energy-bar {
+    flex: 1;
+    height: 12px;
+    background: #E0E0E0;
+    border-radius: 6px;
+    overflow: hidden;
+    margin: 0 10px;
+}
+
+.energy-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #FF6B6B, #FFE66D, #2ECC71);
+    border-radius: 6px;
+    transition: width 0.5s ease;
+}
+
+.energy-text {
+    color: var(--primary-color);
+    font-weight: bold;
+    width: 40px;
+}
+
+/* 🎮 动作按钮 */
+.action-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.action-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    padding: 15px 10px;
+    border: none;
+    border-radius: 15px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    cursor: pointer;
+    transition: var(--transition);
+    font-size: 0.9em;
+}
+
+.action-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-hover);
+}
+
+.action-btn:active {
+    transform: translateY(0);
+}
+
+.btn-icon {
+    font-size: 1.5em;
+}
+
+.btn-text {
+    font-size: 0.85em;
+}
+
+/* 👥 子Agent列表 */
+.sub-agents-list {
+    min-height: 100px;
+}
+
+.empty-text {
+    color: var(--text-light);
+    font-style: italic;
+    text-align: center;
+    padding: 20px;
+}
+
+.sub-lobster-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    background: rgba(78, 205, 196, 0.1);
+    border-radius: 10px;
+    margin-bottom: 10px;
+    transition: var(--transition);
+}
+
+.sub-lobster-item:hover {
+    background: rgba(78, 205, 196, 0.2);
+}
+
+.sub-lobster-avatar {
+    font-size: 1.5em;
+}
+
+.sub-lobster-info {
+    flex: 1;
+}
+
+.sub-lobster-name {
+    font-weight: 500;
+    color: var(--text-dark);
+}
+
+.sub-lobster-status {
+    font-size: 0.8em;
+    color: var(--text-light);
+}
+
+.sub-lobster-task {
+    font-size: 0.75em;
+    color: var(--secondary-color);
+}
+
+/* 📋 任务面板 */
+.task-panel {
+    grid-area: sidebar;
+    background: var(--card-bg);
+    border-radius: var(--border-radius);
+    padding: 20px;
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(10px);
+    overflow-y: auto;
+}
+
+.task-panel h3 {
+    margin-bottom: 15px;
+    color: var(--text-dark);
+    font-size: 1.1em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* 📝 任务列表 */
+.task-list {
+    margin-bottom: 25px;
+}
+
+.task-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 10px;
+    margin-bottom: 8px;
+    transition: var(--transition);
+}
+
+.task-item:hover {
+    background: rgba(255, 255, 255, 0.8);
+}
+
+.task-item.completed {
+    opacity: 0.7;
+}
+
+.task-item.completed .task-text {
+    text-decoration: line-through;
+}
+
+.task-item.active {
+    background: rgba(78, 205, 196, 0.2);
+    border-left: 3px solid var(--secondary-color);
+}
+
+.task-icon {
+    font-size: 1.2em;
+}
+
+.task-text {
+    flex: 1;
+    font-size: 0.9em;
+    color: var(--text-dark);
+}
+
+.task-time {
+    font-size: 0.75em;
+    color: var(--text-light);
+}
+
+/* 📊 今日统计 */
+.today-stats {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+}
+
+.mini-stat {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 15px;
+    background: rgba(255, 107, 107, 0.1);
+    border-radius: 10px;
+}
+
+.mini-label {
+    font-size: 0.85em;
+    color: var(--text-light);
+}
+
+.mini-value {
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+/* 📌 底部 */
+.footer {
+    background: rgba(0, 0, 0, 0.3);
+    padding: 15px;
+    text-align: center;
+    color: white;
+    font-size: 0.9em;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+}
+
+.separator {
+    opacity: 0.5;
+}
+
+#connectionStatus.connected {
+    color: #2ECC71;
+}
+
+#connectionStatus.disconnected {
+    color: #E74C3C;
+}
+
+/* 🎬 动画定义 */
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+@keyframes water-flow {
+    0% { background-position: 0 0; }
+    100% { background-position: 100px 100px; }
+}
+
+@keyframes rise {
+    0% {
+        bottom: -50px;
+        opacity: 0;
+    }
+    10% {
+        opacity: 1;
+    }
+    90% {
+        opacity: 1;
+    }
+    100% {
+        bottom: 100%;
+        opacity: 0;
+    }
+}
+
+@keyframes sway {
+    0%, 100% { transform: rotate(-5deg); }
+    50% { transform: rotate(5deg); }
+}
+
+@keyframes blink {
+    0%, 96%, 100% { transform: scaleY(1); }
+    98% { transform: scaleY(0.1); }
+}
+
+@keyframes look-around {
+    0%, 100% { transform: translate(-50%, -50%) translate(0, 0); }
+    25% { transform: translate(-50%, -50%) translate(-5px, -3px); }
+    50% { transform: translate(-50%, -50%) translate(5px, 0); }
+    75% { transform: translate(-50%, -50%) translate(0, 3px); }
+}
+
+@keyframes claw-wave {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(-15deg); }
+    75% { transform: rotate(15deg); }
+}
+
+@keyframes sparkle {
+    0%, 100% { transform: translateX(-50%) scale(1) rotate(0deg); }
+    50% { transform: translateX(-50%) scale(1.1) rotate(10deg); }
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(-5px); }
+}
+
+@keyframes fade-in-out {
+    0% { opacity: 0; transform: translateX(-50%) translateY(10px); }
+    10% { opacity: 1; transform: translateX(-50%) translateY(0); }
+    90% { opacity: 1; transform: translateX(-50%) translateY(0); }
+    100% { opacity: 0; transform: translateX(-50%) translateY(-10px); }
+}
+
+/* 📱 响应式 */
+@media (max-width: 1024px) {
+    .game-container {
+        grid-template-columns: 1fr;
+        grid-template-areas: 
+            "header"
+            "main"
+            "sidebar";
+    }
+    
+    .control-panel {
+        grid-template-columns: 1fr;
+    }
+    
+    .task-panel {
+        max-height: 400px;
+    }
+}
+
+@media (max-width: 768px) {
+    .lobsters-container {
+        flex-direction: column;
+        gap: 50px;
+    }
+    
+    .lobster {
+        transform: scale(0.8);
+    }
+    
+    .scene {
+        height: 300px;
+    }
+}
+
+/* 🌙 状态样式变体 */
+.lobster[data-status="resting"] .face {
+    background: linear-gradient(180deg, #9B59B6, #8E44AD);
+}
+
+.lobster[data-status="resting"] .eye {
+    animation: none;
+    transform: scaleY(0.1);
+}
+
+.lobster[data-status="working"] .claw-hand {
+    animation: claw-wave 0.5s ease-in-out infinite;
+}
+
+.lobster[data-status="syncing"] {
+    animation: glow 1s ease-in-out infinite;
+}
+
+.lobster[data-status="fixing"] .face {
+    background: linear-gradient(180deg, #E74C3C, #C0392B);
+}
+
+.lobster[data-status="thinking"] .pupil {
+    animation: look-around 1s infinite;
+}
+
+.lobster[data-status="learning"] {
+    filter: hue-rotate(30deg);
+}
+
+@keyframes glow {
+    0%, 100% { filter: brightness(1); }
+    50% { filter: brightness(1.2); }
+}
+
+/* 🎊 特殊效果 */
+.lobster.happy {
+    animation: happy-bounce 0.5s ease-in-out;
+}
+
+@keyframes happy-bounce {
+    0%, 100% { transform: scale(1); }
+    25% { transform: scale(1.1) rotate(-5deg); }
+    50% { transform: scale(1.1) rotate(5deg); }
+    75% { transform: scale(1.1) rotate(-5deg); }
+}
+
+.lobster.eating {
+    animation: eat 0.3s ease-in-out 3;
+}
+
+@keyframes eat {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
